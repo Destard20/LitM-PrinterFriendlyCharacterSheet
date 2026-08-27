@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Legend in the Mist - Character Sheet</title>
+<style>
+    :root { 
+        --border-thick: 3px solid #111; 
+        --border-thin: 1px solid #555; 
+    }
+    body { 
+        font-family: 'Book Antiqua', Palatino, serif; 
+        font-size: 11.5px; 
+        background: #eee; 
+        margin: 0; 
+        padding: 20px; 
+        color: #111;
+    }
+    .page { 
+        background: #fff; 
+        width: 210mm; 
+        min-height: 297mm; 
+        margin: 0 auto 20px; 
+        padding: 10mm 12mm; 
+        box-sizing: border-box; 
+        box-shadow: 0 0 10px rgba(0,0,0,0.5); 
+        display: flex;
+        flex-direction: column;
+    }
+    @media print {
+        body { background: #fff; padding: 0; margin: 0; }
+        .page { box-shadow: none; margin: 0; page-break-after: always; padding: 10mm 12mm; }
+    }
+    
+    /* Grid Layouts */
+    .grid-3col { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr 1fr; 
+        gap: 15px; 
+        flex-grow: 1;
+    }
+    
+    /* Container Boxes */
+    .box { 
+        border: var(--border-thick); 
+        border-radius: 8px; 
+        padding: 15px 10px 10px; 
+        position: relative; 
+        margin-bottom: 12px; 
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        background: #fdfdfd;
+    }
+    .box-title { 
+        position: absolute; 
+        top: -10px; 
+        left: 15px; 
+        background: #fff; 
+        padding: 0 5px; 
+        font-weight: bold; 
+        font-size: 11px; 
+        text-transform: uppercase; 
+        letter-spacing: 1px;
+    }
+
+    /* Common Elements */
+    .line { border-bottom: 1px solid #999; min-height: 19px; margin-bottom: 5px; flex-grow: 1; }
+    .char-name-line { border-bottom: 2.5px solid #111; min-height: 28px; margin-bottom: 8px; flex-grow: 1; }
+    .label { font-size: 10px; font-weight: bold; text-transform: uppercase; color: #333; margin-right: 5px;}
+    .section-label { font-size: 9.5px; font-weight: bold; text-transform: uppercase; margin: 5px 0 3px 0; letter-spacing: 1px; color: #000; }
+    
+    /* Shapes */
+    .checkbox-group { display: flex; gap: 6px; align-items: center; margin-bottom: 3px;}
+    .circle { width: 10px; height: 10px; border: 2px solid #333; border-radius: 50%; display: inline-block; }
+    .square { width: 12px; height: 12px; border: 2px solid #333; display: inline-block; }
+
+    /* Theme Card Specific Elements */
+    .theme-icons { 
+        position: absolute; 
+        top: -10px; 
+        right: 15px; 
+        background: #fff; 
+        padding: 0 5px; 
+        font-size: 13px; 
+        letter-spacing: 3px; 
+        color: #333; 
+    }
+    
+    .tag-row { display: flex; align-items: center; margin-bottom: 6px; }
+    .tag-icon { font-size: 13px; margin-right: 6px; font-family: sans-serif; color: #111; }
+    .scratch-mark { width: 11px; height: 11px; border: 1px solid #555; border-radius: 3px; margin-left: 6px; background: #fff; flex-shrink: 0; }
+    
+    .quest-box { border: 1px solid #888; border-radius: 5px; height: 45px; background: #fff;}
+    
+    .tracks-container { margin-top: auto; border-top: 1px solid #ccc; padding-top: 5px; }
+    .track { display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: bold; margin-bottom: 2px; }
+    
+    /* Fellowship Table with Full-Height Vertical Divider */
+    .f-table { display: flex; flex-direction: column; margin-top: 3px; border: 1px solid #999; border-radius: 4px; overflow: hidden; }
+    .f-row { display: grid; grid-template-columns: 1fr 1.5fr; border-bottom: 1px solid #999; min-height: 24px; align-items: stretch; }
+    .f-row:last-child { border-bottom: none; }
+    .f-row > div:first-child { padding: 4px 6px; border-right: 1px solid #999; display: flex; align-items: center; }
+    .f-row > div:last-child { padding: 4px 6px; display: flex; align-items: center; }
+    .f-header { font-weight: bold; font-size: 9.5px; text-transform: uppercase; border-bottom: 2px solid #333; background: #f5f5f5; }
+</style>
+</head>
+<body>
+
+    <!-- PAGE 1: CORE CARDS & BACKPACK -->
+    <div class="page">
+        <div class="grid-3col">
+            
+            <!-- COLUMN 1: Portrait, Hero Card, Backpack -->
+            <div style="display: flex; flex-direction: column;">
+                <!-- Portrait-->
+                <div class="box" style="height: 180px; flex-shrink: 0;">
+                    <div class="box-title">Portrait</div>
+                </div>
+
+                <!-- Hero Card -->
+                <div class="box" style="flex-shrink: 0;">
+                    <div class="box-title">Hero Card</div>
+                    
+                    <!-- Maximized Character Name Line (No Caption) -->
+                    <div style="margin-top: 6px; margin-bottom: 6px;">
+                        <div class="char-name-line"></div>
+                    </div>
+
+                    <div class="tag-row" style="margin-bottom: 4px;"><span class="label">Player Name:</span><div class="line"></div></div>
+                    
+                    <div class="section-label">Fellowship Relationship</div>
+                    <div class="f-table" style="margin-bottom: 10px;">
+                        <div class="f-row f-header"><div>Companion</div><div>Relationship Tag</div></div>
+                        <div class="f-row"><div></div><div></div></div>
+                        <div class="f-row"><div></div><div></div></div>
+                        <div class="f-row"><div></div><div></div></div>
+                        <div class="f-row"><div></div><div></div></div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div class="section-label" style="margin: 0;">Promise</div>
+                        <div class="checkbox-group" style="margin-bottom: 0;">
+                            <span class="square"></span><span class="square"></span><span class="square"></span><span class="square"></span><span class="square"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="section-label">Quintessences</div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                </div>
+                
+                <!-- Backpack Box -->
+                <div class="box" style="flex-grow: 1; margin-bottom: 0;">
+                    <div class="box-title">Backpack Tags</div>
+                    <div class="line" style="margin-top: 4px;"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div><div class="line"></div>
+                </div>
+            </div>
+
+            <!-- COLUMN 2: Theme Cards I & III -->
+            <div style="display: flex; flex-direction: column;">
+                <!-- Theme Card I -->
+                <div class="box" style="flex-grow: 1;">
+                    <div class="box-title">Theme Card I</div>
+                    <div class="theme-icons" title="Shamrock (Origin) | Sword (Adventure) | Crown (Greatness)">☘ ⚔ ♛</div>
+                    
+                    <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
+                        <span class="label">Type:</span> <div class="line" style="margin-bottom: 0;"></div>
+                    </div>
+                    
+                    <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
+                        <div class="line" style="border-bottom: 2px solid #333;"></div>
+                    </div>
+                    
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    
+                    <div class="section-label">Quest</div>
+                    <div class="quest-box"></div>
+                    
+                    <div class="tracks-container">
+                        <div class="track"><span>ABANDON</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>IMPROVE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>MILESTONE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                    </div>
+                </div>
+
+                <!-- Theme Card III -->
+                <div class="box" style="flex-grow: 1; margin-bottom: 0;">
+                    <div class="box-title">Theme Card III</div>
+                    <div class="theme-icons" title="Shamrock (Origin) | Sword (Adventure) | Crown (Greatness)">☘ ⚔ ♛</div>
+                    
+                    <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
+                        <span class="label">Type:</span> <div class="line" style="margin-bottom: 0;"></div>
+                    </div>
+                    
+                    <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
+                        <div class="line" style="border-bottom: 2px solid #333;"></div>
+                    </div>
+                    
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    
+                    <div class="section-label">Quest</div>
+                    <div class="quest-box"></div>
+                    
+                    <div class="tracks-container">
+                        <div class="track"><span>ABANDON</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>IMPROVE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>MILESTONE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMN 3: Theme Cards II & IV -->
+            <div style="display: flex; flex-direction: column;">
+                <!-- Theme Card II -->
+                <div class="box" style="flex-grow: 1;">
+                    <div class="box-title">Theme Card II</div>
+                    <div class="theme-icons" title="Shamrock (Origin) | Sword (Adventure) | Crown (Greatness)">☘ ⚔ ♛</div>
+                    
+                    <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
+                        <span class="label">Type:</span> <div class="line" style="margin-bottom: 0;"></div>
+                    </div>
+                    
+                    <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
+                        <div class="line" style="border-bottom: 2px solid #333;"></div>
+                    </div>
+                    
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    
+                    <div class="section-label">Quest</div>
+                    <div class="quest-box"></div>
+                    
+                    <div class="tracks-container">
+                        <div class="track"><span>ABANDON</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>IMPROVE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>MILESTONE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                    </div>
+                </div>
+
+                <!-- Theme Card IV -->
+                <div class="box" style="flex-grow: 1; margin-bottom: 0;">
+                    <div class="box-title">Theme Card IV</div>
+                    <div class="theme-icons" title="Shamrock (Origin) | Sword (Adventure) | Crown (Greatness)">☘ ⚔ ♛</div>
+                    
+                    <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
+                        <span class="label">Type:</span> <div class="line" style="margin-bottom: 0;"></div>
+                    </div>
+                    
+                    <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
+                        <div class="line" style="border-bottom: 2px solid #333;"></div>
+                    </div>
+                    
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div><div class="scratch-mark"></div></div>
+                    
+                    <div class="section-label">Quest</div>
+                    <div class="quest-box"></div>
+                    
+                    <div class="tracks-container">
+                        <div class="track"><span>ABANDON</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>IMPROVE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                        <div class="track"><span>MILESTONE</span><div class="checkbox-group"><span class="circle"></span><span class="circle"></span><span class="circle"></span></div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PAGE 2: HISTORY & IMPROVEMENTS -->
+    <div class="page">
+        <div class="grid-3col">
+            
+            <!-- Column 1 & 2 (Spanning 2 Columns): History & Notes -->
+            <div style="grid-column: span 2; display: flex; flex-direction: column;">
+                <div class="box" style="flex-grow: 1; margin-bottom: 0;">
+                    <div class="box-title">History, Quests & Campaign Notes</div>
+                    <div class="line" style="margin-top: 8px;"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                    <div class="line"></div><div class="line"></div>
+                </div>
+            </div>
+
+            <!-- Column 3: Special Improvements & Session Statuses -->
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Special Improvements -->
+                <div class="box" style="flex-grow: 1; margin-bottom: 0;">
+                    <div class="box-title">Special Improvements</div>
+                    
+                    <div style="margin-top: 4px;">
+                        <div class="section-label">Theme I Improvement</div>
+                        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+                    </div>
+                    
+                    <div style="margin-top: 6px;">
+                        <div class="section-label">Theme II Improvement</div>
+                        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+                    </div>
+                    
+                    <div style="margin-top: 6px;">
+                        <div class="section-label">Theme III Improvement</div>
+                        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+                    </div>
+
+                    <div style="margin-top: 6px;">
+                        <div class="section-label">Theme IV Improvement</div>
+                        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+                    </div>
+
+                    <div style="margin-top: 6px;">
+                        <div class="section-label">Additional / Advanced</div>
+                        <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+                    </div>
+                </div>
+
+                <!-- Session-End Statuses Card (4 Trackers) -->
+                <div class="box" style="flex-shrink: 0; margin-bottom: 0; padding: 10px 8px 8px 8px;">
+                    <div class="box-title">Session-End Statuses</div>
+                    
+                    <!-- Status Row 1 -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 3px;">
+                        <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
+                            <span class="label">Tag:</span> <div class="line" style="margin-bottom: 0;"></div>
+                        </div>
+                        <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
+                            <div><div style="font-weight:bold;">1</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">2</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">3</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">4</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">5</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">6</div><div class="square" style="width:10px; height:10px;"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Status Row 2 -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 3px;">
+                        <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
+                            <span class="label">Tag:</span> <div class="line" style="margin-bottom: 0;"></div>
+                        </div>
+                        <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
+                            <div><div style="font-weight:bold;">1</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">2</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">3</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">4</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">5</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">6</div><div class="square" style="width:10px; height:10px;"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Status Row 3 -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 3px;">
+                        <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
+                            <span class="label">Tag:</span> <div class="line" style="margin-bottom: 0;"></div>
+                        </div>
+                        <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
+                            <div><div style="font-weight:bold;">1</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">2</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">3</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">4</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">5</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">6</div><div class="square" style="width:10px; height:10px;"></div></div>
+                        </div>
+                    </div>
+
+                    <!-- Status Row 4 -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
+                        <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
+                            <span class="label">Tag:</span> <div class="line" style="margin-bottom: 0;"></div>
+                        </div>
+                        <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
+                            <div><div style="font-weight:bold;">1</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">2</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">3</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">4</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">5</div><div class="square" style="width:10px; height:10px;"></div></div>
+                            <div><div style="font-weight:bold;">6</div><div class="square" style="width:10px; height:10px;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
