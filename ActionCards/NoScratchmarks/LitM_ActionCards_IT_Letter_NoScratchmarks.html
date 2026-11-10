@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Legend in the Mist - Carte Azione</title>
+<style>
+    /* Paper: Letter (215.9 x 279.4 mm). Cards: 63 x 88 mm (standard trading card), 3 x 3, edge to edge.
+       Print at 100% scale, margins "None", background graphics on. */
+    @page { size: letter; margin: 0; }
+
+    :root {
+        --paper-w: 215.9mm;
+        --paper-h: 279.4mm;
+        --grid-x: 13.45mm;
+        --grid-y: 7.7mm;
+        --card-w: 63mm;
+        --card-h: 88mm;
+        --border-thick: 3px solid #111;
+    }
+    body {
+        font-family: 'Book Antiqua', Palatino, serif;
+        font-size: 11.5px;
+        background: #eee;
+        margin: 0;
+        padding: 20px;
+        color: #111;
+    }
+    .page {
+        position: relative;
+        overflow: hidden;
+        background: #fff;
+        width: var(--paper-w);
+        height: var(--paper-h);
+        margin: 0 auto 20px;
+        box-sizing: border-box;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    @media print {
+        body { background: #fff; padding: 0; margin: 0; }
+        .page { box-shadow: none; margin: 0; page-break-after: always; break-after: page; }
+    }
+
+    /* Card grid */
+    .grid {
+        position: absolute;
+        left: var(--grid-x);
+        top: var(--grid-y);
+        display: grid;
+        grid-template-columns: repeat(3, var(--card-w));
+        grid-template-rows: repeat(3, var(--card-h));
+    }
+    .card {
+        width: var(--card-w);
+        height: var(--card-h);
+        padding: 1.5mm;
+        box-sizing: border-box;
+        display: flex;
+    }
+
+    /* Cut lines: run across the whole page, landing on the card edges */
+    .cut { position: absolute; z-index: 2; pointer-events: none; }
+    .cut.v { top: 0; bottom: 0; width: 0; border-left: 0.2mm dashed #888; margin-left: -0.1mm; }
+    .cut.h { left: 0; right: 0; height: 0; border-top: 0.2mm dashed #888; margin-top: -0.1mm; }
+    .cut-hint {
+        position: absolute;
+        z-index: 3;
+        left: calc(var(--grid-x) + 2mm);
+        top: calc(var(--grid-y) / 2);
+        transform: translateY(-50%);
+        font-size: 8px;
+        color: #777;
+        background: #fff;
+        padding: 0 1.5mm;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+    .cut-hint .scissors { font-family: sans-serif; font-size: 11px; margin-right: 1mm; }
+
+    /* Card box (same look as the hero sheet boxes) */
+    .box {
+        flex-grow: 1;
+        border: var(--border-thick);
+        border-radius: 8px;
+        padding: 4mm 3mm 2mm;
+        position: relative;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        background: #fdfdfd;
+    }
+    .box-title {
+        position: absolute;
+        top: -8px;
+        left: 10px;
+        background: #fff;
+        padding: 0 5px;
+        font-weight: bold;
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .name-line { border-bottom: 2.5px solid #111; min-height: 7mm; margin-bottom: 1mm; flex-shrink: 0; }
+    .section-label { font-size: 8.5px; font-weight: bold; text-transform: uppercase; margin: 1.2mm 0 0.3mm 0; letter-spacing: 1px; color: #000; white-space: nowrap; }
+    .tag-row { display: flex; align-items: flex-end; flex-grow: 1; min-height: 4.8mm; }
+    .tag-icon { font-size: 11px; margin-right: 5px; margin-bottom: 1px; font-family: sans-serif; color: #111; }
+    .line { border-bottom: 1px solid #999; flex-grow: 1; align-self: stretch; }
+    .scratch-mark { width: 11px; height: 11px; border: 1px solid #555; border-radius: 3px; margin-left: 6px; background: #fff; flex-shrink: 0; box-sizing: content-box; }
+    .claw-scratch {
+        display: inline-block;
+        transform: scaleX(-1) rotate(90deg);
+        font-size: 10px;
+        font-weight: bold;
+        color: #444;
+        margin-top: -2px;
+    }
+</style>
+</head>
+<body>
+
+    <div class="page">
+    <div class="cut v" style="left: 13.45mm;"></div>
+    <div class="cut v" style="left: 76.45mm;"></div>
+    <div class="cut v" style="left: 139.45mm;"></div>
+    <div class="cut v" style="left: 202.45mm;"></div>
+    <div class="cut h" style="top: 7.7mm;"></div>
+    <div class="cut h" style="top: 95.7mm;"></div>
+    <div class="cut h" style="top: 183.7mm;"></div>
+    <div class="cut h" style="top: 271.7mm;"></div>
+    <div class="cut-hint"><span class="scissors">✂</span>Ritaglia lungo le linee tratteggiate</div>
+    <div class="grid">
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="box">
+                <div class="box-title">Carta Azione</div>
+                <div class="name-line"></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">♦</span><div class="line"></div><div class="scratch-mark"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="tag-row"><span class="tag-icon">▽</span><div class="line"></div></div>
+                <div class="section-label">Note</div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+                <div class="tag-row"><div class="line"></div></div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

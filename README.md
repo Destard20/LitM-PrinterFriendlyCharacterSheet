@@ -14,6 +14,10 @@ This repository supports both **English (EN)** and **Italian (IT)** languages ac
   * PDF: `NoScratchmarks/Legend in the Mist - Character Sheet.pdf` / `NoScratchmarks/Legend in the Mist - Scheda del Personaggio.pdf`
 * **Web-Fillable (`/WebFillable`):** Browser-fillable templates with interactive text fields and toggleable checkboxes.
   * HTML: `WebFillable/LitM_WebFillable_HeroSheet_EN.html` / `WebFillable/LitM_WebFillable_HeroSheet_IT.html`
+* **Action Cards (`/ActionCards`):** A page of 9 reminder cards at standard trading-card size (63 × 88 mm, like Magic or Pokémon cards), with dashed cut lines. On each card, write an action (e.g. *Attack*), the power tags you usually use for it (e.g. *Sword*, *Mighty*), its weakness tags, and some notes.
+  * With scratchmarks, A4: `ActionCards/LitM_ActionCards_EN_A4.html` / `ActionCards/LitM_ActionCards_IT_A4.html`
+  * With scratchmarks, US Letter: `ActionCards/LitM_ActionCards_EN_Letter.html` / `ActionCards/LitM_ActionCards_IT_Letter.html`
+  * Empty checkboxes: the same files with a `_NoScratchmarks` suffix, in `ActionCards/NoScratchmarks/`
 
 ## 📖 How to Use
 
@@ -25,6 +29,15 @@ Download and print the `.pdf` file corresponding to your preferred language and 
 2. For Web-Fillable sheets, type directly into the fields and toggle checkboxes as needed.
 3. Open the browser's print dialog (`Ctrl + P` or `Cmd + P`).
 4. **Important Settings:** Enable **"Print Background Graphics"** (or "Background colors and images") in the settings so borders and shaded headers render correctly.
+
+### Printing Action Cards
+To get cards at the exact size, use these print settings:
+* **Paper size:** the one in the file name (A4 or Letter).
+* **Margins:** None.
+* **Scale:** 100% / "Actual size" (not "Fit to page").
+* **Background graphics:** On.
+
+Cut along the dashed lines. The lines continue into the page margins, so you can still see them after the first cuts.
 
 ## 📜 Credits & Acknowledgments
 
