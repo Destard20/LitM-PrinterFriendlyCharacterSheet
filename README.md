@@ -77,10 +77,10 @@ Templates use `{{key}}` placeholders, filled from the language file. If a templa
 ### Adding a language
 1. Copy `src/lang/en.json` to `src/lang/<code>.json` (e.g. `es.json`).
 2. Translate the values; keep the keys. Set `_code` (used in file names, e.g. `ES`), `_folder_sheet` and `_folder_cards` (the output folder names), and `lang` (the HTML language code, e.g. `es`).
-3. Run `python3 build.py`. The new language appears in its own folder (e.g. `es/`), and in the itch.io uploads.
+3. Run `python3 build.py`. The new language appears in its own folder (e.g. `es/`).
 
 ### Publishing to itch.io
-The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads 7 downloads per language: each PDF on its own, plus a zip of all the HTML files (`en-html`, `it-html`). Files that didn't change are skipped.
+The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads only the English versions with scratchmarks: the character sheet PDF, the action card PDFs (A4 and Letter), and a zip of the matching HTML files, printable and web-fillable (`en-html`). Italian and no-scratchmark versions stay on GitHub only; `ITCH_LANGUAGES` in `tools/publish_itch.py` controls which languages go to itch. Files that didn't change are skipped.
 
 One-time setup:
 1. Create an API key at <https://itch.io/user/settings/api-keys>.
