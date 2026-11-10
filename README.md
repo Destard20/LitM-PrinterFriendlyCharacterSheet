@@ -97,7 +97,7 @@ This project stands on the shoulders of existing fantastic designs for the game:
 * **Original Structure:** The layout, fields, and core structure are directly based on the official [Legend in the Mist RPG - Character Sheet](https://cdn.shopify.com/s/files/1/2508/6356/files/Legend_in_the_Mist_RPG_-_Character_Sheet.pdf) provided by Son of Oak Game Studio.
 * **Layout Inspiration:** The portrait-style organization and flow were inspired by the community-made [Legend in the Mist - Portrait Character Sheet](https://www.drivethrurpg.com/en/product/534731/legend-in-the-mist-portrait-character-sheet) available on DriveThruRPG.
 * **Fonts:** [EB Garamond](https://fonts.google.com/specimen/EB+Garamond) for all text, [Noto Sans Symbols 2](https://fonts.google.com/noto/specimen/Noto+Sans+Symbols+2) and [Noto Sans Symbols](https://fonts.google.com/noto/specimen/Noto+Sans+Symbols) for the icons, and [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP) for the 彡 scratchmark. All are under the [SIL Open Font License](https://openfontlicense.org); the licence texts are in `src/fonts/`.
-* **AI Assistance:** The HTML/CSS coding and formatting adjustments were generated with the assistance of Google's Gemini AI.
+* **AI Assistance:** The HTML/CSS, the build scripts and the formatting were made with the assistance of AI tools.
 
 ---
 *Created by @Destard for the TTRPG community. May your rolls be high and your stories unforgettable!*
