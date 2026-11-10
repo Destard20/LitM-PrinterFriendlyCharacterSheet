@@ -5,6 +5,9 @@
 <meta charset="UTF-8">
 <title>Legend in the Mist - Scheda del Personaggio Web-Fillable</title>
 <style>
+    @page { size: A4; margin: 0; }
+    /* Always print backgrounds (white patches behind box titles, shaded headers) */
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     :root { 
         --border-thick: 3px solid #111; 
         --border-thin: 1px solid #555; 
@@ -124,6 +127,8 @@
         font-size: 16px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 2px;
         box-sizing: border-box; padding-bottom: 8px;
     }
+    /* Smaller placeholder so long translations (e.g. NOME PERSONAGGIO) fit; typed names stay large */
+    .char-name-wrapper input::placeholder { font-size: 13px; letter-spacing: 1px; }
 
     /* Multi-Line Overlays */
     .overlay-wrapper {
@@ -168,6 +173,9 @@
     @media print {
         body { background: #fff; padding: 0; margin: 0; }
         .page { box-shadow: none; margin: 0; page-break-after: always; padding: 10mm 12mm; }
+        /* Exactly one sheet of paper per page, so rounding never spills onto an extra blank page */
+        .page { height: 297mm; min-height: 0; overflow: hidden; }
+        .page:last-child { page-break-after: auto; break-after: auto; }
         ::placeholder { color: transparent; }
     }
 </style>

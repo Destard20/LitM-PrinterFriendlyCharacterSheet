@@ -1,0 +1,49 @@
+# Rebuilds the HTML sheets and PDFs in en/ and it/ whenever their sources change,
+# and commits the result back to the branch.
+name: Build sheets
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "build.py"
+      - ".github/workflows/build.yml"
+  # Adds a "Run workflow" button in the Actions tab (works on any branch).
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-sheets-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The sheets use 'Book Antiqua' / Palatino. On Linux, this package provides
+      # P052, a Palatino clone that fontconfig substitutes automatically.
+      - name: Install fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-urw-base35
+
+      # Google Chrome comes preinstalled on GitHub's Ubuntu runners.
+      - name: Build HTML and PDFs
+        run: python3 build.py --pdf
+
+      - name: Commit regenerated files
+        run: |
+          git add en it pdf-manifest.json
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "regenerate sheets from src/"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

@@ -19,10 +19,13 @@ Available in **English** (`en/`) and **Italian** (`it/`).
 **Action cards** (`LitM_ActionCards_<EN|IT>_<A4|Letter>…`): a page of 9 reminder cards at standard trading-card size (63 × 88 mm, like Magic or Pokémon cards), with dashed cut lines. On each card, write an action (e.g. *Attack*), the power tags you usually use for it (e.g. *Sword*, *Mighty*), its weakness tags, and some notes.
 * One file per paper size: **A4** or **Letter**.
 * With scratchmarks, or with empty checkboxes (`…_NoScratchmarks.html`).
+* Every version is also available as a ready-to-print PDF.
 
 **Source** (only needed to change the sheets, see *Editing the sheets* below):
 * `src/`: the templates and the language files (`src/lang/en.json`, `src/lang/it.json`).
-* `build.py`: generates every HTML file in `en/` and `it/` from `src/`.
+* `build.py`: generates every HTML file and PDF in `en/` and `it/` from `src/`.
+* `pdf-manifest.json`: written by `build.py`; remembers which HTML each PDF was printed from.
+* `.github/workflows/build.yml`: runs `build.py` on GitHub automatically (see *Automatic builds* below).
 
 ## 📖 How to Use
 
@@ -33,7 +36,7 @@ Download and print the `.pdf` file corresponding to your preferred language and 
 1. Open any `.html` template in a modern web browser.
 2. For Web-Fillable sheets, type directly into the fields and toggle checkboxes as needed.
 3. Open the browser's print dialog (`Ctrl + P` or `Cmd + P`).
-4. **Important Settings:** Enable **"Print Background Graphics"** (or "Background colors and images") in the settings so borders and shaded headers render correctly.
+4. The sheets ask the browser to print their backgrounds. If box titles still have a line through them, enable **"Print Background Graphics"** (or "Background colors and images") in the print settings.
 
 ### Printing Action Cards
 To get cards at the exact size, use these print settings:
@@ -46,12 +49,21 @@ Cut along the dashed lines. The lines continue into the page margins, so you can
 
 ## 🛠️ Editing the sheets
 
-The HTML files in `en/` and `it/` are **generated**: don't edit them directly, or your changes will be overwritten by the next build. Instead:
+The HTML and PDF files in `en/` and `it/` are **generated**: don't edit them directly, or your changes will be overwritten by the next build. Instead, change the layout in a template in `src/` (`hero_sheet.html`, `hero_sheet_web.html`, `action_cards.html`, `action_card.html`), or the wording in `src/lang/<language>.json`.
 
-1. Change the layout in a template in `src/` (`hero_sheet.html`, `hero_sheet_web.html`, `action_cards.html`, `action_card.html`), or the wording in `src/lang/<language>.json`.
-2. Run `python3 build.py` (Python 3, nothing to install). It rewrites every sheet, for every language.
-3. Commit both the `src/` change and the regenerated files.
-4. Re-export the PDFs from the browser if the character sheet changed.
+### Automatic builds (GitHub)
+When a change to `src/` or `build.py` is pushed to `main`, a GitHub Action rebuilds every HTML file and the PDFs that changed, and commits them back as **github-actions[bot]**. Pull afterwards (`git pull`) before pushing again.
+
+You can also start it by hand on any branch: **Actions** tab → **Build sheets** → **Run workflow**.
+
+### Building locally
+* `python3 build.py`: HTML only (Python 3, nothing to install).
+* `python3 build.py --pdf`: HTML, plus the PDFs whose HTML changed.
+* `python3 build.py --pdf-all`: HTML, plus every PDF.
+
+PDFs are printed with a headless browser. It uses Chrome, Edge, Chromium or Brave if one is installed (Edge comes with Windows), and falls back to Firefox if `geckodriver` is installed. To pick the browser yourself, set `LITM_BROWSER` to the path of a Chrome, Edge, Chromium or Brave executable. PDFs change on every print (they contain a timestamp), so `pdf-manifest.json` keeps track of which ones are already up to date.
+
+Commit the `src/` change together with the regenerated files (or just push `src/` and let the GitHub Action do the rest).
 
 Templates use `{{key}}` placeholders, filled from the language file. If a template uses a key that a language file doesn't have, the build stops and names it.
 

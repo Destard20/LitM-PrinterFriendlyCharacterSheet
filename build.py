@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Build every sheet, in every language, from the templates in src/.
 
-    python3 build.py
+    python3 build.py            # HTML only
+    python3 build.py --pdf      # HTML, then the PDFs whose HTML changed
+    python3 build.py --pdf-all  # HTML, then every PDF
 
 Templates (src/*.html) contain {{key}} placeholders. Text keys come from the
 language files in src/lang/<language>.json; layout keys (paper size, cut lines,
@@ -11,19 +13,39 @@ language files in src/lang/<language>.json; layout keys (paper size, cut lines,
 To add a language: copy src/lang/en.json to src/lang/<code>.json, translate the
 values (keep the keys), and run this script again.
 
+PDFs are printed with a headless Chromium-based browser (Chrome, Edge, Chromium
+or Brave); set LITM_BROWSER to the browser's path to choose one yourself. If none
+is found, Firefox is used instead, through geckodriver.
+pdf-manifest.json remembers which HTML each PDF was printed from, so only PDFs
+whose HTML changed are printed again.
+
 Only the Python standard library is used.
 """
+import argparse
+import base64
+import hashlib
 import json
+import os
 import re
+import shutil
+import signal
+import socket
+import subprocess
 import sys
+import tempfile
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 LANG_DIR = SRC / "lang"
+MANIFEST = ROOT / "pdf-manifest.json"
 PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
 
 SCRATCH = '<span class="claw-scratch">彡</span>'
+NO_SCRATCH_PDF = "No Scratchmarks"
 
 # Action cards: standard trading card size, 3 x 3 per page, edge to edge.
 CARD_W, CARD_H = 63.0, 88.0
@@ -33,10 +55,16 @@ PAPERS = {
     "Letter": {"page_size": "letter", "w": 215.9, "h": 279.4},
 }
 
+PDF_TIMEOUT = 120  # seconds per PDF
+
 
 class BuildError(Exception):
     pass
 
+
+# ---------------------------------------------------------------------------
+# HTML
+# ---------------------------------------------------------------------------
 
 def mm(x: float) -> str:
     """Format a millimetre value without trailing zeros (10.50 -> 10.5)."""
@@ -63,15 +91,24 @@ def write(path: Path, html: str, template: str) -> None:
     first, rest = html.split("\n", 1)  # keep <!DOCTYPE html> as the very first line
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(f"{first}\n{note}\n{rest}", encoding="utf-8", newline="\n")
-    print("  wrote", path.relative_to(ROOT))
+    print("  wrote", rel(path))
 
 
-def build_hero_sheets(out: Path, code: str, text: dict, used: set) -> None:
-    for suffix, scratch in (("", SCRATCH), ("_NoScratchmarks", "")):
+def rel(path: Path) -> str:
+    return path.relative_to(ROOT).as_posix()
+
+
+def build_hero_sheets(out: Path, code: str, text: dict, used: set) -> list:
+    """Write the character sheets; return the (html, pdf, paper) to print."""
+    to_print = []
+    for suffix, scratch, pdf_suffix in (("", SCRATCH, ""), ("_NoScratchmarks", "", f" ({NO_SCRATCH_PDF})")):
         html = render("hero_sheet.html", {**text, "scratch": scratch}, used)
-        write(out / f"LitM_HeroSheet_{code}{suffix}.html", html, "hero_sheet.html")
+        html_path = out / f"LitM_HeroSheet_{code}{suffix}.html"
+        write(html_path, html, "hero_sheet.html")
+        to_print.append((html_path, out / f"{text['title_sheet']}{pdf_suffix}.pdf", "A4"))
     html = render("hero_sheet_web.html", text, used)
     write(out / f"LitM_WebFillable_HeroSheet_{code}.html", html, "hero_sheet_web.html")
+    return to_print
 
 
 def cut_lines(grid_x: float, grid_y: float) -> str:
@@ -81,8 +118,10 @@ def cut_lines(grid_x: float, grid_y: float) -> str:
     return "\n".join(lines)
 
 
-def build_action_cards(out: Path, code: str, text: dict, used: set) -> None:
-    for suffix, scratch in (("", SCRATCH), ("_NoScratchmarks", "")):
+def build_action_cards(out: Path, code: str, text: dict, used: set) -> list:
+    """Write the action card pages; return the (html, pdf, paper) to print."""
+    to_print = []
+    for suffix, scratch, pdf_suffix in (("", SCRATCH, ""), ("_NoScratchmarks", "", f", {NO_SCRATCH_PDF}")):
         card = render("action_card.html", {**text, "scratch": scratch}, used).rstrip("\n")
         cards = "\n".join([card] * 9)
         for paper, p in PAPERS.items():
@@ -102,10 +141,13 @@ def build_action_cards(out: Path, code: str, text: dict, used: set) -> None:
                 "cards": cards,
             }
             html = render("action_cards.html", {**text, **layout}, used)
-            write(out / f"LitM_ActionCards_{code}_{paper}{suffix}.html", html, "action_cards.html")
+            html_path = out / f"LitM_ActionCards_{code}_{paper}{suffix}.html"
+            write(html_path, html, "action_cards.html")
+            to_print.append((html_path, out / f"{text['title_cards']} ({paper}{pdf_suffix}).pdf", paper))
+    return to_print
 
 
-def build_language(lang_file: Path) -> None:
+def build_language(lang_file: Path) -> list:
     data = json.loads(lang_file.read_text(encoding="utf-8"))
     meta = {k: v for k, v in data.items() if k.startswith("_")}
     text = {k: v for k, v in data.items() if not k.startswith("_")}
@@ -117,22 +159,238 @@ def build_language(lang_file: Path) -> None:
     code = meta["_code"]
     print(f"{lang_file.name} -> {out.name}/")
     used: set = set()
-    build_hero_sheets(out / meta["_folder_sheet"], code, text, used)
-    build_action_cards(out / meta["_folder_cards"], code, text, used)
+    to_print = build_hero_sheets(out / meta["_folder_sheet"], code, text, used)
+    to_print += build_action_cards(out / meta["_folder_cards"], code, text, used)
 
     unused = sorted(set(text) - used)
     if unused:
         print(f"  warning: {lang_file.name} has keys no template uses: {', '.join(unused)}")
+    return to_print
 
+
+# ---------------------------------------------------------------------------
+# PDF
+# ---------------------------------------------------------------------------
+
+CHROMIUM_NAMES = [
+    "google-chrome", "google-chrome-stable", "chromium", "chromium-browser",
+    "microsoft-edge", "microsoft-edge-stable", "brave-browser", "brave",
+]
+
+
+def chromium_install_paths() -> list:
+    """Usual install locations on Windows and macOS."""
+    paths = []
+    for env in ("PROGRAMFILES", "PROGRAMFILES(X86)", "LOCALAPPDATA"):
+        base = os.environ.get(env)
+        if base:
+            paths += [
+                Path(base, "Google/Chrome/Application/chrome.exe"),
+                Path(base, "Microsoft/Edge/Application/msedge.exe"),
+                Path(base, "BraveSoftware/Brave-Browser/Application/brave.exe"),
+            ]
+    paths += [
+        Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+        Path("/Applications/Chromium.app/Contents/MacOS/Chromium"),
+        Path("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"),
+        Path("/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"),
+    ]
+    return paths
+
+
+def find_chromium():
+    override = os.environ.get("LITM_BROWSER")
+    if override:
+        return override
+    for name in CHROMIUM_NAMES:
+        found = shutil.which(name)
+        if found:
+            return found
+    for path in chromium_install_paths():
+        if path.is_file():
+            return str(path)
+    return None
+
+
+def run_with_timeout(cmd: list) -> subprocess.CompletedProcess:
+    """Run a command; on timeout, kill it *and* any helper processes it started."""
+    posix = os.name == "posix"
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+                            start_new_session=posix)
+    try:
+        out, err = proc.communicate(timeout=PDF_TIMEOUT)
+    except subprocess.TimeoutExpired:
+        if posix:
+            os.killpg(proc.pid, signal.SIGKILL)
+        else:
+            proc.kill()
+        proc.communicate()
+        raise
+    return subprocess.CompletedProcess(cmd, proc.returncode, out, err)
+
+
+class ChromiumPrinter:
+    """Prints with Chrome / Edge / Chromium / Brave's built-in --print-to-pdf."""
+
+    def __init__(self, exe: str):
+        self.exe = exe
+        self.name = exe
+
+    def print(self, html_path: Path, pdf_path: Path, paper: str) -> None:
+        # Paper size and margins come from the page's own @page rule.
+        with tempfile.TemporaryDirectory(prefix="litm-pdf-") as tmp:
+            out = Path(tmp, "out.pdf")
+            cmd = [
+                self.exe,
+                "--headless",
+                "--disable-gpu",
+                "--no-first-run",
+                "--no-default-browser-check",
+                "--no-pdf-header-footer",
+                f"--user-data-dir={Path(tmp, 'profile')}",  # never hand off to an open browser window
+                f"--print-to-pdf={out}",
+                html_path.as_uri(),
+            ]
+            try:
+                result = run_with_timeout(cmd)
+            except subprocess.TimeoutExpired:
+                raise BuildError(f"{rel(html_path)}: the browser took over {PDF_TIMEOUT}s to print")
+            if not out.is_file() or out.stat().st_size == 0:
+                raise BuildError(
+                    f"{rel(html_path)}: the browser did not produce a PDF (exit code {result.returncode})\n"
+                    + (result.stderr.strip()[-2000:] or "(no error output)")
+                )
+            shutil.copyfile(out, pdf_path)
+
+    def close(self) -> None:
+        pass
+
+
+class FirefoxPrinter:
+    """Prints with headless Firefox, driven through geckodriver (WebDriver "print")."""
+
+    def __init__(self, geckodriver: str):
+        self.name = f"Firefox (via {geckodriver})"
+        sock = socket.socket()
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+        sock.close()
+        self.base = f"http://127.0.0.1:{port}"
+        self.driver = subprocess.Popen([geckodriver, "--port", str(port)],
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        self.session = None
+        for _ in range(100):
+            try:
+                urllib.request.urlopen(self.base + "/status", timeout=1).close()
+                break
+            except OSError:
+                time.sleep(0.1)
+        else:
+            self.close()
+            raise BuildError("geckodriver did not start")
+        caps = {"capabilities": {"alwaysMatch": {"moz:firefoxOptions": {"args": ["-headless"]}}}}
+        self.session = self.call("POST", "/session", caps)["sessionId"]
+
+    def call(self, method: str, path: str, body=None):
+        data = json.dumps(body).encode() if body is not None else None
+        req = urllib.request.Request(self.base + path, data=data, method=method,
+                                     headers={"Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=PDF_TIMEOUT) as resp:
+                return json.loads(resp.read())["value"]
+        except urllib.error.HTTPError as e:
+            raise BuildError(f"Firefox/geckodriver error on {path}: {e.read().decode(errors='replace')[:500]}")
+
+    def print(self, html_path: Path, pdf_path: Path, paper: str) -> None:
+        p = PAPERS[paper]
+        self.call("POST", f"/session/{self.session}/url", {"url": html_path.as_uri()})
+        pdf = self.call("POST", f"/session/{self.session}/print", {
+            "background": True,
+            "shrinkToFit": False,
+            "page": {"width": p["w"] / 10, "height": p["h"] / 10},  # cm
+            "margin": {"top": 0, "bottom": 0, "left": 0, "right": 0},
+        })
+        pdf_path.write_bytes(base64.b64decode(pdf))
+
+    def close(self) -> None:
+        if self.session:
+            try:
+                self.call("DELETE", f"/session/{self.session}")
+            except (BuildError, OSError):
+                pass
+        self.driver.terminate()
+        try:
+            self.driver.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            self.driver.kill()
+
+
+def make_printer():
+    exe = find_chromium()
+    if exe:
+        return ChromiumPrinter(exe)
+    geckodriver = shutil.which("geckodriver")
+    if geckodriver:
+        return FirefoxPrinter(geckodriver)
+    raise BuildError(
+        "no browser found to print PDFs.\n"
+        f"  Looked on PATH for: {', '.join(CHROMIUM_NAMES)}, geckodriver (Firefox),\n"
+        "  and in the usual Chrome / Edge / Brave install folders.\n"
+        "  Install Chrome, Edge or Chromium, or set LITM_BROWSER to the path of one."
+    )
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def save_manifest(manifest: dict) -> None:
+    MANIFEST.write_text(json.dumps(dict(sorted(manifest.items())), indent=2) + "\n",
+                        encoding="utf-8", newline="\n")
+
+
+def build_pdfs(to_print: list, force: bool) -> None:
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.is_file() else {}
+    todo = []
+    for html_path, pdf_path, paper in to_print:
+        digest = sha256(html_path)
+        entry = manifest.get(rel(pdf_path), {})
+        if force or not pdf_path.is_file() or entry.get("html_sha256") != digest:
+            todo.append((html_path, pdf_path, paper, digest))
+
+    print(f"PDFs: {len(todo)} to print, {len(to_print) - len(todo)} already up to date")
+    if not todo:
+        return
+    printer = make_printer()
+    print("  using", printer.name)
+    try:
+        for html_path, pdf_path, paper, digest in todo:
+            pdf_path.parent.mkdir(parents=True, exist_ok=True)
+            printer.print(html_path, pdf_path, paper)
+            manifest[rel(pdf_path)] = {"html": rel(html_path), "html_sha256": digest}
+            save_manifest(manifest)  # after each PDF, so an interrupted run keeps finished work
+            print("  printed", rel(pdf_path))
+    finally:
+        printer.close()
+
+# ---------------------------------------------------------------------------
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Build the sheets from src/.")
+    parser.add_argument("--pdf", action="store_true", help="also print the PDFs whose HTML changed")
+    parser.add_argument("--pdf-all", action="store_true", help="also print every PDF, even if up to date")
+    args = parser.parse_args()
+
     lang_files = sorted(LANG_DIR.glob("*.json"))
     if not lang_files:
         print(f"error: no language files in {LANG_DIR}", file=sys.stderr)
         return 1
     try:
+        to_print = []
         for lang_file in lang_files:
-            build_language(lang_file)
+            to_print += build_language(lang_file)
+        if args.pdf or args.pdf_all:
+            build_pdfs(to_print, force=args.pdf_all)
     except BuildError as e:
         print(f"error: {e}", file=sys.stderr)
         return 1

@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <title>Legend in the Mist - Carte Azione</title>
 <style>
+    /* Always print backgrounds (white patches behind box titles, shaded headers) */
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     /* Paper: A4 (210 x 297 mm). Cards: 63 x 88 mm (standard trading card), 3 x 3, edge to edge.
        Print at 100% scale, margins "None", background graphics on. */
     @page { size: A4; margin: 0; }
@@ -39,6 +41,7 @@
     @media print {
         body { background: #fff; padding: 0; margin: 0; }
         .page { box-shadow: none; margin: 0; page-break-after: always; break-after: page; }
+        .page:last-child { page-break-after: auto; break-after: auto; }
     }
 
     /* Card grid */
