@@ -31,7 +31,6 @@ Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder 
 * `build.py`: generates every HTML file and PDF in `en/` and `it/` from `src/`, and warns about any leftover file there that it no longer produces.
 * `pdf-manifest.json`: written by `build.py`; remembers which HTML each PDF was printed from.
 * `.github/workflows/build.yml`: runs `build.py` on GitHub automatically, then uploads to itch.io (see *Automatic builds* and *Publishing to itch.io* below).
-* `itch/`: the text for the itch.io page, ready to paste.
 
 ## 📖 How to Use
 
@@ -93,7 +92,7 @@ One-time setup:
 
 Without the secret, the Action just skips the upload. To upload by hand: **Actions** → **Build sheets** → **Run workflow** (on `main`; tick *Upload every file* to re-upload unchanged files too). Locally, `python3 tools/publish_itch.py --dry-run` shows what would be uploaded.
 
-itch.io has no API for the page text: edit it by pasting from `itch/page.html` (see `itch/README.md`).
+itch.io has no API for the page text, screenshots or devlogs: edit those on itch.io directly.
 
 ## 📜 Credits & Acknowledgments
 
