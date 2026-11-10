@@ -56,6 +56,9 @@ def channels(stage: Path) -> list:
         for paper in build.PAPERS:
             result.append((f"{lang}-action-cards-{paper.lower()}",
                            pdf / data["_folder_cards"] / f"{data['title_cards']} ({paper}).pdf"))
+        for paper in build.PAPERS:
+            result.append((f"{lang}-fellowship-{paper.lower()}",
+                           pdf / data["_folder_fellowship"] / f"{data['title_fellowship']} ({paper}).pdf"))
 
     for lang in ZIP_LANGUAGES:
         html_dir = ROOT / lang / "HTML"

@@ -31,6 +31,38 @@
     "html": "en/HTML/CharacterSheet/LitM_HeroSheet_EN_Letter_NoScratchmarks.html",
     "html_sha256": "7bfda60b2b09686f724828df3b0bf9ee2c4bd1c0a45312c53aba0a4c2d6d7300"
   },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (A4).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_A4.html",
+    "html_sha256": "8e261318d8f02071ca7964ff382a7e04c6c4a9741d2c0de50a131740c454cc2e"
+  },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (A4, 2 per Page).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_A4_2PerPage.html",
+    "html_sha256": "3e493ccc1a3e00c967f6de60ef22f68f4c4d9c1ea62d73390d0d140383558111"
+  },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (A4, 2 per Page, No Scratchmarks).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_A4_2PerPage_NoScratchmarks.html",
+    "html_sha256": "a05701c2e10648c3de828676d6fcf9c45108dd0c2d882b1219e1df0896178718"
+  },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (A4, No Scratchmarks).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_A4_NoScratchmarks.html",
+    "html_sha256": "e8035f377b4ce00db9bf439b59dd9cef1c74a7be28e8190ae3de0dccfde2cbea"
+  },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (Letter).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_Letter.html",
+    "html_sha256": "9fc47d75bf9b4b3bd3c015b127c34d1a8eef046569ca2531b9a8d67ebd521e03"
+  },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (Letter, 2 per Page).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_Letter_2PerPage.html",
+    "html_sha256": "b0711541aa10f3b988994d72f1b82d37fcd4cdb9f496e977772092101341c9a6"
+  },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (Letter, 2 per Page, No Scratchmarks).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_Letter_2PerPage_NoScratchmarks.html",
+    "html_sha256": "b829804c1feec7fcf51becc11bae183997b8ca8c740a7622e4c2f3944b9a470a"
+  },
+  "en/PDF/Fellowship/Legend in the Mist - Fellowship Card (Letter, No Scratchmarks).pdf": {
+    "html": "en/HTML/Fellowship/LitM_Fellowship_EN_Letter_NoScratchmarks.html",
+    "html_sha256": "ee6edd53407ec0590e4a1f7e28014f7a0acfd83b6ed4b7a7178e65095c35fe9a"
+  },
   "it/PDF/CarteAzione/Legend in the Mist - Carte Azione (A4).pdf": {
     "html": "it/HTML/CarteAzione/LitM_ActionCards_IT_A4.html",
     "html_sha256": "527c3310c2f2bd8ec06c9fba6710c573788cce6f57c7efabc9fa09a1392a966b"
@@ -46,6 +78,38 @@
   "it/PDF/CarteAzione/Legend in the Mist - Carte Azione (Letter, No Scratchmarks).pdf": {
     "html": "it/HTML/CarteAzione/LitM_ActionCards_IT_Letter_NoScratchmarks.html",
     "html_sha256": "1fe486dd73c111db2a702a521f0d2a08068ab2665de5a580e4e0a7787b8b15b8"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (A4).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_A4.html",
+    "html_sha256": "dbdfed5083b8e068d91050c5cfd759ec62d080a880e8eae71842dc6b356baa7f"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (A4, 2 per Pagina).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_A4_2PerPage.html",
+    "html_sha256": "13622f7812660e060d0c5b0fbeae75c72e76c7251625532f8b1c64521c624aeb"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (A4, 2 per Pagina, No Scratchmarks).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_A4_2PerPage_NoScratchmarks.html",
+    "html_sha256": "41b140075f2ef9dfedee60bf668f35bcb844f4f6d4435c870ae0954ca51055dc"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (A4, No Scratchmarks).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_A4_NoScratchmarks.html",
+    "html_sha256": "387957976be7bedfcd93586ab58330c686bb26735a2db532c752f887bdee4d4b"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (Letter).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_Letter.html",
+    "html_sha256": "a05f165658fa530566f4fcec6919884346e732c0221ae8aa63ab5cbd3a92d882"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (Letter, 2 per Pagina).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_Letter_2PerPage.html",
+    "html_sha256": "56f3a8f9f221079cc59935e324eedb03ae648dad64f9f7a06e629bc1be6a9690"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (Letter, 2 per Pagina, No Scratchmarks).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_Letter_2PerPage_NoScratchmarks.html",
+    "html_sha256": "3fa6ac64e2bd6465ba39149583f93464d7fdd5ac1cb788c8bc1d0b039a06fbe9"
+  },
+  "it/PDF/Compagnia/Legend in the Mist - Carta Compagnia (Letter, No Scratchmarks).pdf": {
+    "html": "it/HTML/Compagnia/LitM_Fellowship_IT_Letter_NoScratchmarks.html",
+    "html_sha256": "b3219c00f84b34ee8e9cd91971b82347f76608fe66f975319f97122f87bcc372"
   },
   "it/PDF/SchedaPersonaggio/Legend in the Mist - Scheda del Personaggio (A4).pdf": {
     "html": "it/HTML/SchedaPersonaggio/LitM_HeroSheet_IT_A4.html",

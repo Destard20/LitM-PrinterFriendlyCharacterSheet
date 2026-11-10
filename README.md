@@ -14,6 +14,8 @@ Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder 
 | Character sheet, HTML | [`en/HTML/CharacterSheet/`](en/HTML/CharacterSheet) | [`it/HTML/SchedaPersonaggio/`](it/HTML/SchedaPersonaggio) |
 | Action cards, PDF | [`en/PDF/ActionCards/`](en/PDF/ActionCards) | [`it/PDF/CarteAzione/`](it/PDF/CarteAzione) |
 | Action cards, HTML | [`en/HTML/ActionCards/`](en/HTML/ActionCards) | [`it/HTML/CarteAzione/`](it/HTML/CarteAzione) |
+| Fellowship card, PDF | [`en/PDF/Fellowship/`](en/PDF/Fellowship) | [`it/PDF/Compagnia/`](it/PDF/Compagnia) |
+| Fellowship card, HTML | [`en/HTML/Fellowship/`](en/HTML/Fellowship) | [`it/HTML/Compagnia/`](it/HTML/Compagnia) |
 
 **Character sheet**:
 * One file per paper size: **A4** or **Letter** (on Letter the writing lines are slightly closer together, so both pages fit).
@@ -25,6 +27,12 @@ Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder 
 * One file per paper size: **A4** or **Letter**.
 * **Standard** (`LitM_ActionCards_EN_A4.html`, PDF) with scratchmarks, or **No Scratchmarks** (`…_NoScratchmarks.html`, PDF) with empty checkboxes.
 * **Web-Fillable** (`LitM_WebFillable_ActionCards_EN_A4.html`): type the action, tags and notes in the browser, tick the checkboxes, then print (see *Printing*). Text isn't saved, so print before closing the page.
+
+**Fellowship card** (*Carta Compagnia*): the group's shared theme card. It has the Fellowship name (a power tag, with its scratch box), 6 power tags with scratch boxes, 2 weakness tags, the Quest, the Abandon / Improve / Milestone tracks, and boxes for Special Improvements and Notes.
+* One file per paper size: **A4** or **Letter**.
+* **Full page** (`LitM_Fellowship_EN_A4.html`, PDF `… (A4).pdf`), or **2 per page** (`…_2PerPage.html`, PDF `… (A4, 2 per Page).pdf`): the same card at half size, twice per sheet, with a dashed cut line across the middle.
+* Each with scratchmarks, or **No Scratchmarks** (`…_NoScratchmarks.html`, PDF) with empty checkboxes.
+* **Web-Fillable** (`LitM_WebFillable_Fellowship_EN_A4.html`, full page): type in the browser, tick the scratch boxes and track circles, then print. Text isn't saved, so print before closing the page.
 
 **Source** (only needed to change the sheets, see *Editing the sheets* below):
 * `src/`: the templates, the language files (`src/lang/en.json`, `src/lang/it.json`) and the fonts (`src/fonts/`).
@@ -54,7 +62,7 @@ Cut along the dashed lines. The lines continue into the page margins, so you can
 
 ## 🛠️ Editing the sheets
 
-The HTML and PDF files in `en/` and `it/` are **generated**: don't edit them directly, or your changes will be overwritten by the next build. Instead, change the layout in a template in `src/` (`hero_sheet.html`, `hero_sheet_web.html`, `action_cards.html`, `action_card.html`, `action_card_web.html`, `action_card_web.css`), or the wording in `src/lang/<language>.json`.
+The HTML and PDF files in `en/` and `it/` are **generated**: don't edit them directly, or your changes will be overwritten by the next build. Instead, change the layout in a template in `src/` (`hero_sheet.html`, `hero_sheet_web.html`, `action_cards.html`, `action_card.html`, `action_card_web.html`, `action_card_web.css`, `fellowship.html`, `fellowship_spread.html`, `fellowship_web_spread.html`, `fellowship_web.css`), or the wording in `src/lang/<language>.json`.
 
 ### Automatic builds (GitHub)
 When a change to `src/` or `build.py` is pushed to `main`, a GitHub Action rebuilds every HTML file and the PDFs that changed, and commits them back as **github-actions[bot]**. Pull afterwards (`git pull`) before pushing again.
@@ -76,12 +84,12 @@ Templates use `{{key}}` placeholders, filled from the language file. If a templa
 
 ### Adding a language
 1. Copy `src/lang/en.json` to `src/lang/<code>.json` (e.g. `es.json`).
-2. Translate the values; keep the keys. Set `_code` (used in file names, e.g. `ES`), `_folder_sheet` and `_folder_cards` (the output folder names), and `lang` (the HTML language code, e.g. `es`).
+2. Translate the values; keep the keys. Set `_code` (used in file names, e.g. `ES`), `_folder_sheet`, `_folder_cards` and `_folder_fellowship` (the output folder names), and `lang` (the HTML language code, e.g. `es`).
 3. Run `python3 build.py`. The new language appears in its own folder (e.g. `es/`).
 
 ### Publishing to itch.io
 The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads:
-* the English PDFs with scratchmarks: character sheet and action cards, A4 and Letter (one download each);
+* the English PDFs with scratchmarks: character sheet, action cards and full-page Fellowship card, A4 and Letter (one download each);
 * one zip per language (`en-html`, `it-html`) with all of that language's HTML files: standard, no-scratchmarks and web-fillable.
 
 `PDF_LANGUAGES` and `ZIP_LANGUAGES` in `tools/publish_itch.py` control which languages go to itch. Files that didn't change are skipped.
