@@ -40,7 +40,7 @@ Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder 
 * `pdf-manifest.json`: written by `build.py`; remembers which HTML each PDF was printed from.
 * `.github/workflows/build.yml`: runs `build.py` on GitHub automatically, then uploads to itch.io (see *Automatic builds* and *Publishing to itch.io* below).
 * `tools/`: `publish_itch.py` (the itch.io upload) and `fetch_fonts.py` (downloads the fonts into `src/fonts/`).
-* `AGENT.md`: notes for AI coding assistants (and anyone changing the code): how the build works, conventions, and how to check a change. `CLAUDE.md` points to it.
+* `AGENTS.md`: notes for AI coding assistants (and anyone changing the code): how the build works, conventions, and how to check a change. `CLAUDE.md` points to it.
 
 ## 📖 How to Use
 
