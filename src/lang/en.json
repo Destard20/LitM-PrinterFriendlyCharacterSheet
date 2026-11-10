@@ -35,5 +35,7 @@
   "title_cards": "Legend in the Mist - Action Cards",
   "action_card": "Action Card",
   "notes": "Notes",
-  "cut_hint": "Cut along the dashed lines"
+  "cut_hint": "Cut along the dashed lines",
+  "title_cards_web": "Legend in the Mist - Web-Fillable Action Cards",
+  "ph_action_name": "Action Name"
 }

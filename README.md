@@ -6,24 +6,28 @@ Available in **English** (`en/`) and **Italian** (`it/`).
 
 ## 📂 Repository Structure
 
+Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder (open in a browser, including the web-fillable versions):
+
 | | English | Italiano |
 |---|---|---|
-| Character sheet | [`en/CharacterSheet/`](en/CharacterSheet) | [`it/SchedaPersonaggio/`](it/SchedaPersonaggio) |
-| Action cards | [`en/ActionCards/`](en/ActionCards) | [`it/CarteAzione/`](it/CarteAzione) |
+| Character sheet, PDF | [`en/PDF/CharacterSheet/`](en/PDF/CharacterSheet) | [`it/PDF/SchedaPersonaggio/`](it/PDF/SchedaPersonaggio) |
+| Character sheet, HTML | [`en/HTML/CharacterSheet/`](en/HTML/CharacterSheet) | [`it/HTML/SchedaPersonaggio/`](it/HTML/SchedaPersonaggio) |
+| Action cards, PDF | [`en/PDF/ActionCards/`](en/PDF/ActionCards) | [`it/PDF/CarteAzione/`](it/PDF/CarteAzione) |
+| Action cards, HTML | [`en/HTML/ActionCards/`](en/HTML/ActionCards) | [`it/HTML/CarteAzione/`](it/HTML/CarteAzione) |
 
-**Character sheet** (`LitM_HeroSheet_<EN|IT>…`):
-* **Standard** (`LitM_HeroSheet_EN.html`): features the stylized scratchmarks (`彡`) inside checkboxes. Also as PDF.
-* **No Scratchmarks** (`…_NoScratchmarks.html`): a minimalist variant with clean, empty checkboxes. Also as PDF.
+**Character sheet**:
+* **Standard** (`LitM_HeroSheet_EN.html`, PDF): features the stylized scratchmarks (`彡`) inside checkboxes.
+* **No Scratchmarks** (`…_NoScratchmarks.html`, PDF `… (No Scratchmarks).pdf`): a minimalist variant with clean, empty checkboxes.
 * **Web-Fillable** (`LitM_WebFillable_HeroSheet_EN.html`): fill it in the browser, with text fields and clickable checkboxes.
 
-**Action cards** (`LitM_ActionCards_<EN|IT>_<A4|Letter>…`): a page of 9 reminder cards at standard trading-card size (63 × 88 mm, like Magic or Pokémon cards), with dashed cut lines. On each card, write an action (e.g. *Attack*), the power tags you usually use for it (e.g. *Sword*, *Mighty*), its weakness tags, and some notes.
+**Action cards**: a page of 9 reminder cards at standard trading-card size (63 × 88 mm, like Magic or Pokémon cards), with dashed cut lines. On each card, write an action (e.g. *Attack*), the power tags you usually use for it (e.g. *Sword*, *Mighty*), its weakness tags, and some notes.
 * One file per paper size: **A4** or **Letter**.
-* With scratchmarks, or with empty checkboxes (`…_NoScratchmarks.html`).
-* Every version is also available as a ready-to-print PDF.
+* **Standard** (`LitM_ActionCards_EN_A4.html`, PDF) with scratchmarks, or **No Scratchmarks** (`…_NoScratchmarks.html`, PDF) with empty checkboxes.
+* **Web-Fillable** (`LitM_WebFillable_ActionCards_EN_A4.html`): type the action, tags and notes in the browser, tick the checkboxes, then print (see *Printing Action Cards*). Text isn't saved, so print before closing the page.
 
 **Source** (only needed to change the sheets, see *Editing the sheets* below):
 * `src/`: the templates, the language files (`src/lang/en.json`, `src/lang/it.json`) and the fonts (`src/fonts/`).
-* `build.py`: generates every HTML file and PDF in `en/` and `it/` from `src/`.
+* `build.py`: generates every HTML file and PDF in `en/` and `it/` from `src/`, and warns about any leftover file there that it no longer produces.
 * `pdf-manifest.json`: written by `build.py`; remembers which HTML each PDF was printed from.
 * `.github/workflows/build.yml`: runs `build.py` on GitHub automatically (see *Automatic builds* below).
 
@@ -49,7 +53,7 @@ Cut along the dashed lines. The lines continue into the page margins, so you can
 
 ## 🛠️ Editing the sheets
 
-The HTML and PDF files in `en/` and `it/` are **generated**: don't edit them directly, or your changes will be overwritten by the next build. Instead, change the layout in a template in `src/` (`hero_sheet.html`, `hero_sheet_web.html`, `action_cards.html`, `action_card.html`), or the wording in `src/lang/<language>.json`.
+The HTML and PDF files in `en/` and `it/` are **generated**: don't edit them directly, or your changes will be overwritten by the next build. Instead, change the layout in a template in `src/` (`hero_sheet.html`, `hero_sheet_web.html`, `action_cards.html`, `action_card.html`, `action_card_web.html`, `action_card_web.css`), or the wording in `src/lang/<language>.json`.
 
 ### Automatic builds (GitHub)
 When a change to `src/` or `build.py` is pushed to `main`, a GitHub Action rebuilds every HTML file and the PDFs that changed, and commits them back as **github-actions[bot]**. Pull afterwards (`git pull`) before pushing again.

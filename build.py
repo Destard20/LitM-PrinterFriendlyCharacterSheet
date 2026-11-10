@@ -64,6 +64,9 @@ class BuildError(Exception):
     pass
 
 
+WRITTEN: set = set()  # every HTML file written in this run
+
+
 # ---------------------------------------------------------------------------
 # HTML
 # ---------------------------------------------------------------------------
@@ -110,6 +113,7 @@ def write(path: Path, html: str, template: str) -> None:
     first, rest = html.split("\n", 1)  # keep <!DOCTYPE html> as the very first line
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(f"{first}\n{note}\n{rest}", encoding="utf-8", newline="\n")
+    WRITTEN.add(path)
     print("  wrote", rel(path))
 
 
@@ -117,16 +121,16 @@ def rel(path: Path) -> str:
     return path.relative_to(ROOT).as_posix()
 
 
-def build_hero_sheets(out: Path, code: str, text: dict, used: set) -> list:
+def build_hero_sheets(html_dir: Path, pdf_dir: Path, code: str, text: dict, used: set) -> list:
     """Write the character sheets; return the (html, pdf, paper) to print."""
     to_print = []
     for suffix, scratch, pdf_suffix in (("", SCRATCH, ""), ("_NoScratchmarks", "", f" ({NO_SCRATCH_PDF})")):
         html = render("hero_sheet.html", {**text, "scratch": scratch}, used)
-        html_path = out / f"LitM_HeroSheet_{code}{suffix}.html"
+        html_path = html_dir / f"LitM_HeroSheet_{code}{suffix}.html"
         write(html_path, html, "hero_sheet.html")
-        to_print.append((html_path, out / f"{text['title_sheet']}{pdf_suffix}.pdf", "A4"))
+        to_print.append((html_path, pdf_dir / f"{text['title_sheet']}{pdf_suffix}.pdf", "A4"))
     html = render("hero_sheet_web.html", text, used)
-    write(out / f"LitM_WebFillable_HeroSheet_{code}.html", html, "hero_sheet_web.html")
+    write(html_dir / f"LitM_WebFillable_HeroSheet_{code}.html", html, "hero_sheet_web.html")
     return to_print
 
 
@@ -137,16 +141,27 @@ def cut_lines(grid_x: float, grid_y: float) -> str:
     return "\n".join(lines)
 
 
-def build_action_cards(out: Path, code: str, text: dict, used: set) -> list:
+def build_action_cards(html_dir: Path, pdf_dir: Path, code: str, text: dict, used: set) -> list:
     """Write the action card pages; return the (html, pdf, paper) to print."""
     to_print = []
-    for suffix, scratch, pdf_suffix in (("", SCRATCH, ""), ("_NoScratchmarks", "", f", {NO_SCRATCH_PDF}")):
-        card = render("action_card.html", {**text, "scratch": scratch}, used).rstrip("\n")
+    web_css = (SRC / "action_card_web.css").read_text(encoding="utf-8").rstrip("\n")
+    # (card template, scratchmark, file prefix, file suffix, page title key, extra CSS, PDF name suffix or None)
+    variants = [
+        ("action_card.html", SCRATCH, "LitM_ActionCards", "", "title_cards", "", ""),
+        ("action_card.html", "", "LitM_ActionCards", "_NoScratchmarks", "title_cards", "", f", {NO_SCRATCH_PDF}"),
+        ("action_card_web.html", "", "LitM_WebFillable_ActionCards", "", "title_cards_web", web_css + "\n", None),
+    ]
+    used.add("title_cards")  # used for the PDF names
+    for card_template, scratch, prefix, suffix, title_key, extra_css, pdf_suffix in variants:
+        card = render(card_template, {**text, "scratch": scratch}, used).rstrip("\n")
         cards = "\n".join([card] * 9)
+        used.add(title_key)
         for paper, p in PAPERS.items():
             grid_x = (p["w"] - 3 * CARD_W) / 2
             grid_y = (p["h"] - 3 * CARD_H) / 2
             layout = {
+                "page_title": text[title_key],
+                "web_css": extra_css,
                 "paper_name": paper,
                 "page_size": p["page_size"],
                 "paper_w": mm(p["w"]),
@@ -160,9 +175,10 @@ def build_action_cards(out: Path, code: str, text: dict, used: set) -> list:
                 "cards": cards,
             }
             html = render("action_cards.html", {**text, **layout}, used)
-            html_path = out / f"LitM_ActionCards_{code}_{paper}{suffix}.html"
+            html_path = html_dir / f"{prefix}_{code}_{paper}{suffix}.html"
             write(html_path, html, "action_cards.html")
-            to_print.append((html_path, out / f"{text['title_cards']} ({paper}{pdf_suffix}).pdf", paper))
+            if pdf_suffix is not None:
+                to_print.append((html_path, pdf_dir / f"{text['title_cards']} ({paper}{pdf_suffix}).pdf", paper))
     return to_print
 
 
@@ -178,13 +194,24 @@ def build_language(lang_file: Path) -> list:
     code = meta["_code"]
     print(f"{lang_file.name} -> {out.name}/")
     used: set = set()
-    to_print = build_hero_sheets(out / meta["_folder_sheet"], code, text, used)
-    to_print += build_action_cards(out / meta["_folder_cards"], code, text, used)
+    sheet, cards = meta["_folder_sheet"], meta["_folder_cards"]
+    to_print = build_hero_sheets(out / "HTML" / sheet, out / "PDF" / sheet, code, text, used)
+    to_print += build_action_cards(out / "HTML" / cards, out / "PDF" / cards, code, text, used)
 
     unused = sorted(set(text) - used)
     if unused:
         print(f"  warning: {lang_file.name} has keys no template uses: {', '.join(unused)}")
     return to_print
+
+
+def warn_stale(lang_files: list, to_print: list) -> None:
+    """Point out HTML/PDF files in the output folders that this build didn't produce."""
+    expected = WRITTEN | {pdf for _, pdf, _ in to_print}
+    for lang_file in lang_files:
+        out = ROOT / lang_file.stem
+        for path in sorted(out.rglob("*")):
+            if path.suffix in (".html", ".pdf") and path not in expected:
+                print(f"warning: {rel(path)} is not produced by build.py any more; delete it if it's left over")
 
 
 # ---------------------------------------------------------------------------
@@ -415,6 +442,7 @@ def main() -> int:
         to_print = []
         for lang_file in lang_files:
             to_print += build_language(lang_file)
+        warn_stale(lang_files, to_print)
         if args.pdf or args.pdf_all:
             build_pdfs(to_print, force=args.pdf_all)
     except BuildError as e:

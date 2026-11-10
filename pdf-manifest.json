@@ -1,50 +1,50 @@
 {
-  "en/ActionCards/Legend in the Mist - Action Cards (A4).pdf": {
-    "html": "en/ActionCards/LitM_ActionCards_EN_A4.html",
+  "en/PDF/ActionCards/Legend in the Mist - Action Cards (A4).pdf": {
+    "html": "en/HTML/ActionCards/LitM_ActionCards_EN_A4.html",
     "html_sha256": "4ce4f12edfc6c4cbfb0e9babb9a76fc92bfc1820c52cc5e3ff583d551dd765f3"
   },
-  "en/ActionCards/Legend in the Mist - Action Cards (A4, No Scratchmarks).pdf": {
-    "html": "en/ActionCards/LitM_ActionCards_EN_A4_NoScratchmarks.html",
+  "en/PDF/ActionCards/Legend in the Mist - Action Cards (A4, No Scratchmarks).pdf": {
+    "html": "en/HTML/ActionCards/LitM_ActionCards_EN_A4_NoScratchmarks.html",
     "html_sha256": "bbf5169a434f6da0aae289827b16531f92f074dab7424a181bb5aebbf37ddb27"
   },
-  "en/ActionCards/Legend in the Mist - Action Cards (Letter).pdf": {
-    "html": "en/ActionCards/LitM_ActionCards_EN_Letter.html",
+  "en/PDF/ActionCards/Legend in the Mist - Action Cards (Letter).pdf": {
+    "html": "en/HTML/ActionCards/LitM_ActionCards_EN_Letter.html",
     "html_sha256": "3ccf39075e82bf93929e550ea46d558be69f245e5d3a46b735b12f17213b211c"
   },
-  "en/ActionCards/Legend in the Mist - Action Cards (Letter, No Scratchmarks).pdf": {
-    "html": "en/ActionCards/LitM_ActionCards_EN_Letter_NoScratchmarks.html",
+  "en/PDF/ActionCards/Legend in the Mist - Action Cards (Letter, No Scratchmarks).pdf": {
+    "html": "en/HTML/ActionCards/LitM_ActionCards_EN_Letter_NoScratchmarks.html",
     "html_sha256": "0c91e707bdade1a511e947d8cfd8a2122fb99db18aaf650ad7ac2499c109fcf8"
   },
-  "en/CharacterSheet/Legend in the Mist - Character Sheet (No Scratchmarks).pdf": {
-    "html": "en/CharacterSheet/LitM_HeroSheet_EN_NoScratchmarks.html",
+  "en/PDF/CharacterSheet/Legend in the Mist - Character Sheet (No Scratchmarks).pdf": {
+    "html": "en/HTML/CharacterSheet/LitM_HeroSheet_EN_NoScratchmarks.html",
     "html_sha256": "275680cd5600985957831029479693fda3da5028005db41923bbbcc4b0c58b76"
   },
-  "en/CharacterSheet/Legend in the Mist - Character Sheet.pdf": {
-    "html": "en/CharacterSheet/LitM_HeroSheet_EN.html",
+  "en/PDF/CharacterSheet/Legend in the Mist - Character Sheet.pdf": {
+    "html": "en/HTML/CharacterSheet/LitM_HeroSheet_EN.html",
     "html_sha256": "512217e6b7ce93708c528f12562b0b94effcd978261c9862555869338f583e53"
   },
-  "it/CarteAzione/Legend in the Mist - Carte Azione (A4).pdf": {
-    "html": "it/CarteAzione/LitM_ActionCards_IT_A4.html",
+  "it/PDF/CarteAzione/Legend in the Mist - Carte Azione (A4).pdf": {
+    "html": "it/HTML/CarteAzione/LitM_ActionCards_IT_A4.html",
     "html_sha256": "527c3310c2f2bd8ec06c9fba6710c573788cce6f57c7efabc9fa09a1392a966b"
   },
-  "it/CarteAzione/Legend in the Mist - Carte Azione (A4, No Scratchmarks).pdf": {
-    "html": "it/CarteAzione/LitM_ActionCards_IT_A4_NoScratchmarks.html",
+  "it/PDF/CarteAzione/Legend in the Mist - Carte Azione (A4, No Scratchmarks).pdf": {
+    "html": "it/HTML/CarteAzione/LitM_ActionCards_IT_A4_NoScratchmarks.html",
     "html_sha256": "3fbdf9d47d1cca7dde83065646bcb344996dee71557a706e36d6b55c652731e5"
   },
-  "it/CarteAzione/Legend in the Mist - Carte Azione (Letter).pdf": {
-    "html": "it/CarteAzione/LitM_ActionCards_IT_Letter.html",
+  "it/PDF/CarteAzione/Legend in the Mist - Carte Azione (Letter).pdf": {
+    "html": "it/HTML/CarteAzione/LitM_ActionCards_IT_Letter.html",
     "html_sha256": "3ab497c3e64ddd7765c3472ca4bf6107aaaf10887605605ba8cb38123bb6c33c"
   },
-  "it/CarteAzione/Legend in the Mist - Carte Azione (Letter, No Scratchmarks).pdf": {
-    "html": "it/CarteAzione/LitM_ActionCards_IT_Letter_NoScratchmarks.html",
+  "it/PDF/CarteAzione/Legend in the Mist - Carte Azione (Letter, No Scratchmarks).pdf": {
+    "html": "it/HTML/CarteAzione/LitM_ActionCards_IT_Letter_NoScratchmarks.html",
     "html_sha256": "1fe486dd73c111db2a702a521f0d2a08068ab2665de5a580e4e0a7787b8b15b8"
   },
-  "it/SchedaPersonaggio/Legend in the Mist - Scheda del Personaggio (No Scratchmarks).pdf": {
-    "html": "it/SchedaPersonaggio/LitM_HeroSheet_IT_NoScratchmarks.html",
+  "it/PDF/SchedaPersonaggio/Legend in the Mist - Scheda del Personaggio (No Scratchmarks).pdf": {
+    "html": "it/HTML/SchedaPersonaggio/LitM_HeroSheet_IT_NoScratchmarks.html",
     "html_sha256": "c1c0d4aae3dbe1f0eacaa312f469b9187d6066eca5ef13835c7cba1d62f54500"
   },
-  "it/SchedaPersonaggio/Legend in the Mist - Scheda del Personaggio.pdf": {
-    "html": "it/SchedaPersonaggio/LitM_HeroSheet_IT.html",
+  "it/PDF/SchedaPersonaggio/Legend in the Mist - Scheda del Personaggio.pdf": {
+    "html": "it/HTML/SchedaPersonaggio/LitM_HeroSheet_IT.html",
     "html_sha256": "6d499cc761fde672a99506c0cb7d47ffc0115d938d5e1518dad93fac8b99ff8f"
   }
 }

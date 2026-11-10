@@ -35,5 +35,7 @@
   "title_cards": "Legend in the Mist - Carte Azione",
   "action_card": "Carta Azione",
   "notes": "Note",
-  "cut_hint": "Ritaglia lungo le linee tratteggiate"
+  "cut_hint": "Ritaglia lungo le linee tratteggiate",
+  "title_cards_web": "Legend in the Mist - Carte Azione Web-Fillable",
+  "ph_action_name": "Nome Azione"
 }
