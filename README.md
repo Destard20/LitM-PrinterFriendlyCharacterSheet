@@ -2,22 +2,27 @@
 
 A collection of lightweight, single-file HTML character sheets and pre-rendered PDFs for the **Legend in the Mist** tabletop roleplaying game.
 
-This repository supports both **English (EN)** and **Italian (IT)** languages across three different variations.
+Available in **English** (`en/`) and **Italian** (`it/`).
 
 ## 📂 Repository Structure
 
-* **Standard Version (Root Directory):** Features the stylized scratchmarks (`彡`) inside checkboxes.
-  * HTML: `LitM_HeroSheet_EN.html` / `LitM_HeroSheet_IT.html`
-  * PDF: `Legend in the Mist - Character Sheet.pdf` / `Legend in the Mist - Scheda del Personaggio.pdf`
-* **No Scratchmarks (`/NoScratchmarks`):** A minimalist variant with clean, empty checkboxes.
-  * HTML: `NoScratchmarks/LitM_HeroSheet_EN_NoScratchmarks.html` / `NoScratchmarks/LitM_HeroSheet_IT_NoScratchmarks.html`
-  * PDF: `NoScratchmarks/Legend in the Mist - Character Sheet.pdf` / `NoScratchmarks/Legend in the Mist - Scheda del Personaggio.pdf`
-* **Web-Fillable (`/WebFillable`):** Browser-fillable templates with interactive text fields and toggleable checkboxes.
-  * HTML: `WebFillable/LitM_WebFillable_HeroSheet_EN.html` / `WebFillable/LitM_WebFillable_HeroSheet_IT.html`
-* **Action Cards (`/ActionCards`):** A page of 9 reminder cards at standard trading-card size (63 × 88 mm, like Magic or Pokémon cards), with dashed cut lines. On each card, write an action (e.g. *Attack*), the power tags you usually use for it (e.g. *Sword*, *Mighty*), its weakness tags, and some notes.
-  * With scratchmarks, A4: `ActionCards/LitM_ActionCards_EN_A4.html` / `ActionCards/LitM_ActionCards_IT_A4.html`
-  * With scratchmarks, US Letter: `ActionCards/LitM_ActionCards_EN_Letter.html` / `ActionCards/LitM_ActionCards_IT_Letter.html`
-  * Empty checkboxes: the same files with a `_NoScratchmarks` suffix, in `ActionCards/NoScratchmarks/`
+| | English | Italiano |
+|---|---|---|
+| Character sheet | [`en/CharacterSheet/`](en/CharacterSheet) | [`it/SchedaPersonaggio/`](it/SchedaPersonaggio) |
+| Action cards | [`en/ActionCards/`](en/ActionCards) | [`it/CarteAzione/`](it/CarteAzione) |
+
+**Character sheet** (`LitM_HeroSheet_<EN|IT>…`):
+* **Standard** (`LitM_HeroSheet_EN.html`): features the stylized scratchmarks (`彡`) inside checkboxes. Also as PDF.
+* **No Scratchmarks** (`…_NoScratchmarks.html`): a minimalist variant with clean, empty checkboxes. Also as PDF.
+* **Web-Fillable** (`LitM_WebFillable_HeroSheet_EN.html`): fill it in the browser, with text fields and clickable checkboxes.
+
+**Action cards** (`LitM_ActionCards_<EN|IT>_<A4|Letter>…`): a page of 9 reminder cards at standard trading-card size (63 × 88 mm, like Magic or Pokémon cards), with dashed cut lines. On each card, write an action (e.g. *Attack*), the power tags you usually use for it (e.g. *Sword*, *Mighty*), its weakness tags, and some notes.
+* One file per paper size: **A4** or **Letter**.
+* With scratchmarks, or with empty checkboxes (`…_NoScratchmarks.html`).
+
+**Source** (only needed to change the sheets, see *Editing the sheets* below):
+* `src/`: the templates and the language files (`src/lang/en.json`, `src/lang/it.json`).
+* `build.py`: generates every HTML file in `en/` and `it/` from `src/`.
 
 ## 📖 How to Use
 
@@ -38,6 +43,22 @@ To get cards at the exact size, use these print settings:
 * **Background graphics:** On.
 
 Cut along the dashed lines. The lines continue into the page margins, so you can still see them after the first cuts.
+
+## 🛠️ Editing the sheets
+
+The HTML files in `en/` and `it/` are **generated**: don't edit them directly, or your changes will be overwritten by the next build. Instead:
+
+1. Change the layout in a template in `src/` (`hero_sheet.html`, `hero_sheet_web.html`, `action_cards.html`, `action_card.html`), or the wording in `src/lang/<language>.json`.
+2. Run `python3 build.py` (Python 3, nothing to install). It rewrites every sheet, for every language.
+3. Commit both the `src/` change and the regenerated files.
+4. Re-export the PDFs from the browser if the character sheet changed.
+
+Templates use `{{key}}` placeholders, filled from the language file. If a template uses a key that a language file doesn't have, the build stops and names it.
+
+### Adding a language
+1. Copy `src/lang/en.json` to `src/lang/<code>.json` (e.g. `es.json`).
+2. Translate the values; keep the keys. Set `_code` (used in file names, e.g. `ES`), `_folder_sheet` and `_folder_cards` (the output folder names), and `lang` (the HTML language code, e.g. `es`).
+3. Run `python3 build.py`. The new language appears in its own folder (e.g. `es/`).
 
 ## 📜 Credits & Acknowledgments
 

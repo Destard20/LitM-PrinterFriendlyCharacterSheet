@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="{{lang}}">
 <head>
 <meta charset="UTF-8">
-<title>Legend in the Mist - Scheda del Personaggio Web-Fillable</title>
+<title>{{title_web}}</title>
 <style>
     :root { 
         --border-thick: 3px solid #111; 
@@ -110,7 +110,7 @@
     .input-overlay-wrapper input {
         position: absolute; top: 0; left: 0; width: 100%; height: 100%;
         background: transparent; border: none; outline: none; box-sizing: border-box;
-        padding-bottom: 5px; 
+        padding-bottom: 5px; /* Aligns text with the physical .line margin */
     }
 
     /* Character Name Special Overlay */
@@ -180,25 +180,25 @@
             <!-- COLUMN 1: Portrait, Hero Card, Backpack -->
             <div style="display: flex; flex-direction: column;">
                 <div class="box" style="height: 180px; flex-shrink: 0;">
-                    <div class="box-title">Ritratto</div>
+                    <div class="box-title">{{portrait}}</div>
                 </div>
 
                 <div class="box" style="flex-shrink: 0;">
-                    <div class="box-title">Carta Eroe</div>
+                    <div class="box-title">{{hero_card}}</div>
                     
                     <div class="char-name-wrapper">
                         <div class="char-name-line"></div>
-                        <input type="text" placeholder="NOME PERSONAGGIO">
+                        <input type="text" placeholder="{{ph_character_name}}">
                     </div>
 
                     <div class="tag-row" style="margin-bottom: 4px;">
-                        <span class="label">Nome Giocatore:</span>
+                        <span class="label">{{player_name}}</span>
                         <div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div>
                     </div>
                     
-                    <div class="section-label">Relazioni della Compagnia</div>
+                    <div class="section-label">{{fellowship}}</div>
                     <div class="f-table" style="margin-bottom: 10px;">
-                        <div class="f-row f-header"><div>Compagno</div><div>Attributo di Relazione</div></div>
+                        <div class="f-row f-header"><div>{{companion}}</div><div>{{relationship_tag}}</div></div>
                         <div class="f-row"><div><input type="text" class="table-input"></div><div><input type="text" class="table-input"></div></div>
                         <div class="f-row"><div><input type="text" class="table-input"></div><div><input type="text" class="table-input"></div></div>
                         <div class="f-row"><div><input type="text" class="table-input"></div><div><input type="text" class="table-input"></div></div>
@@ -206,20 +206,20 @@
                     </div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <div class="section-label" style="margin: 0;">Promessa</div>
+                        <div class="section-label" style="margin: 0;">{{promise}}</div>
                         <div class="checkbox-group" style="margin-bottom: 0;">
                             <input type="checkbox" class="square-cb"><input type="checkbox" class="square-cb"><input type="checkbox" class="square-cb"><input type="checkbox" class="square-cb"><input type="checkbox" class="square-cb">
                         </div>
                     </div>
                     
-                    <div class="section-label">Quintessenze</div>
+                    <div class="section-label">{{quintessences}}</div>
                     <div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div>
                     <div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div>
                     <div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div>
                 </div>
                 
                 <div class="box" style="flex-grow: 1; margin-bottom: 0;">
-                    <div class="box-title">Attributi dello Zaino</div>
+                    <div class="box-title">{{backpack}}</div>
                     <div class="overlay-wrapper">
                         <div class="line" style="margin-top: 4px;"></div><div class="line"></div><div class="line"></div>
                         <div class="line"></div><div class="line"></div><div class="line"></div>
@@ -234,18 +234,18 @@
             <!-- COLUMN 2: Theme Cards I & III -->
             <div style="display: flex; flex-direction: column;">
                 <div class="box" style="flex-grow: 1;">
-                    <div class="box-title">Carta Tema I</div>
-                    <div class="theme-icons" title="Shamrock (Origine) | Sword (Avventura) | Crown (Grandezza)">☘ ⚔ ♛</div>
+                    <div class="box-title">{{theme_card}} I</div>
+                    <div class="theme-icons" title="{{theme_icons_title}}">☘ ⚔ ♛</div>
                     
                     <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
-                        <span class="label">Tipo:</span> 
+                        <span class="label">{{type}}</span> 
                         <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                     </div>
                     
                     <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
                         <div class="input-overlay-wrapper">
                             <div class="line" style="border-bottom: 2px solid #333;"></div>
-                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="Titolo Tema">
+                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="{{ph_theme_title}}">
                         </div>
 						<input type="checkbox" class="scratch-cb">
                     </div>
@@ -259,29 +259,29 @@
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     
-                    <div class="section-label">Missione</div>
+                    <div class="section-label">{{quest}}</div>
                     <div class="quest-box"><textarea class="quest-textarea"></textarea></div>
                     
                     <div class="tracks-container">
-                        <div class="track"><span>ABBANDONO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>MIGLIORIA</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>AVANZAMENTO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{abandon}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{improve}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{milestone}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
                     </div>
                 </div>
 
                 <div class="box" style="flex-grow: 1; margin-bottom: 0;">
-                    <div class="box-title">Carta Tema III</div>
-                    <div class="theme-icons" title="Shamrock (Origine) | Sword (Avventura) | Crown (Grandezza)">☘ ⚔ ♛</div>
+                    <div class="box-title">{{theme_card}} III</div>
+                    <div class="theme-icons" title="{{theme_icons_title}}">☘ ⚔ ♛</div>
                     
                     <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
-                        <span class="label">Tipo:</span> 
+                        <span class="label">{{type}}</span> 
                         <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                     </div>
                     
                     <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
                         <div class="input-overlay-wrapper">
                             <div class="line" style="border-bottom: 2px solid #333;"></div>
-                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="Titolo Tema">
+                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="{{ph_theme_title}}">
                         </div>
 						<input type="checkbox" class="scratch-cb">
                     </div>
@@ -295,13 +295,13 @@
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     
-                    <div class="section-label">Missione</div>
+                    <div class="section-label">{{quest}}</div>
                     <div class="quest-box"><textarea class="quest-textarea"></textarea></div>
                     
                     <div class="tracks-container">
-                        <div class="track"><span>ABBANDONO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>MIGLIORIA</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>AVANZAMENTO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{abandon}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{improve}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{milestone}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
                     </div>
                 </div>
             </div>
@@ -309,18 +309,18 @@
             <!-- COLUMN 3: Theme Cards II & IV -->
             <div style="display: flex; flex-direction: column;">
                 <div class="box" style="flex-grow: 1;">
-                    <div class="box-title">Carta Tema II</div>
-                    <div class="theme-icons" title="Shamrock (Origine) | Sword (Avventura) | Crown (Grandezza)">☘ ⚔ ♛</div>
+                    <div class="box-title">{{theme_card}} II</div>
+                    <div class="theme-icons" title="{{theme_icons_title}}">☘ ⚔ ♛</div>
                     
                     <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
-                        <span class="label">Tipo:</span> 
+                        <span class="label">{{type}}</span> 
                         <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                     </div>
                     
                     <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
                         <div class="input-overlay-wrapper">
                             <div class="line" style="border-bottom: 2px solid #333;"></div>
-                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="Titolo Tema">
+                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="{{ph_theme_title}}">
                         </div>
 						<input type="checkbox" class="scratch-cb">
                     </div>
@@ -334,29 +334,29 @@
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     
-                    <div class="section-label">Missione</div>
+                    <div class="section-label">{{quest}}</div>
                     <div class="quest-box"><textarea class="quest-textarea"></textarea></div>
                     
                     <div class="tracks-container">
-                        <div class="track"><span>ABBANDONO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>MIGLIORIA</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>AVANZAMENTO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{abandon}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{improve}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{milestone}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
                     </div>
                 </div>
 
                 <div class="box" style="flex-grow: 1; margin-bottom: 0;">
-                    <div class="box-title">Carta Tema IV</div>
-                    <div class="theme-icons" title="Shamrock (Origine) | Sword (Avventura) | Crown (Grandezza)">☘ ⚔ ♛</div>
+                    <div class="box-title">{{theme_card}} IV</div>
+                    <div class="theme-icons" title="{{theme_icons_title}}">☘ ⚔ ♛</div>
                     
                     <div style="display: flex; align-items: flex-end; margin-bottom: 3px; margin-top: 4px;">
-                        <span class="label">Tipo:</span> 
+                        <span class="label">{{type}}</span> 
                         <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                     </div>
                     
                     <div class="tag-row" style="margin-top: 25px; margin-bottom: 10px;">
                         <div class="input-overlay-wrapper">
                             <div class="line" style="border-bottom: 2px solid #333;"></div>
-                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="Titolo Tema">
+                            <input type="text" style="font-weight: bold; font-size: 13px;" placeholder="{{ph_theme_title}}">
                         </div>
 						<input type="checkbox" class="scratch-cb">
                     </div>
@@ -370,13 +370,13 @@
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     <div class="tag-row"><span class="tag-icon">▽</span><div class="input-overlay-wrapper"><div class="line"></div><input type="text"></div></div>
                     
-                    <div class="section-label">Missione</div>
+                    <div class="section-label">{{quest}}</div>
                     <div class="quest-box"><textarea class="quest-textarea"></textarea></div>
                     
                     <div class="tracks-container">
-                        <div class="track"><span>ABBANDONO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>MIGLIORIA</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
-                        <div class="track"><span>AVANZAMENTO</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{abandon}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{improve}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
+                        <div class="track"><span>{{milestone}}</span><div class="checkbox-group"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"><input type="checkbox" class="circle-cb"></div></div>
                     </div>
                 </div>
             </div>
@@ -390,7 +390,7 @@
             
             <div style="grid-column: span 2; display: flex; flex-direction: column;">
                 <div class="box" style="flex-grow: 1; margin-bottom: 0;">
-                    <div class="box-title">Storia, Missioni e Note della Campagna</div>
+                    <div class="box-title">{{history}}</div>
                     <div class="overlay-wrapper">
                         <div class="line" style="margin-top: 8px;"></div><div class="line"></div>
                         <div class="line"></div><div class="line"></div>
@@ -416,10 +416,10 @@
 
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <div class="box" style="flex-grow: 1; margin-bottom: 0;">
-                    <div class="box-title">Miglioramenti Speciali</div>
+                    <div class="box-title">{{special_improvements}}</div>
                     
                     <div style="margin-top: 4px;">
-                        <div class="section-label">Miglioramento Tema I</div>
+                        <div class="section-label">{{theme_improvement_1}}</div>
                         <div class="overlay-wrapper">
                             <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
                             <textarea class="overlay-textarea"></textarea>
@@ -427,7 +427,7 @@
                     </div>
                     
                     <div style="margin-top: 6px;">
-                        <div class="section-label">Miglioramento Tema II</div>
+                        <div class="section-label">{{theme_improvement_2}}</div>
                         <div class="overlay-wrapper">
                             <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
                             <textarea class="overlay-textarea"></textarea>
@@ -435,7 +435,7 @@
                     </div>
                     
                     <div style="margin-top: 6px;">
-                        <div class="section-label">Miglioramento Tema III</div>
+                        <div class="section-label">{{theme_improvement_3}}</div>
                         <div class="overlay-wrapper">
                             <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
                             <textarea class="overlay-textarea"></textarea>
@@ -443,7 +443,7 @@
                     </div>
 
                     <div style="margin-top: 6px;">
-                        <div class="section-label">Miglioramento Tema IV</div>
+                        <div class="section-label">{{theme_improvement_4}}</div>
                         <div class="overlay-wrapper">
                             <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
                             <textarea class="overlay-textarea"></textarea>
@@ -451,7 +451,7 @@
                     </div>
 
                     <div style="margin-top: 6px;">
-                        <div class="section-label">Aggiuntivi / Avanzati</div>
+                        <div class="section-label">{{additional}}</div>
                         <div class="overlay-wrapper">
                             <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
                             <textarea class="overlay-textarea"></textarea>
@@ -460,11 +460,11 @@
                 </div>
 
                 <div class="box" style="flex-shrink: 0; margin-bottom: 0; padding: 10px 8px 8px 8px;">
-                    <div class="box-title">Stati di Fine Sessione</div>
+                    <div class="box-title">{{session_statuses}}</div>
                     
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 3px;">
                         <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
-                            <span class="label">Attributo:</span> 
+                            <span class="label">{{status_tag}}</span> 
                             <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                         </div>
                         <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
@@ -479,7 +479,7 @@
 
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 3px;">
                         <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
-                            <span class="label">Attributo:</span> 
+                            <span class="label">{{status_tag}}</span> 
                             <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                         </div>
                         <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
@@ -494,7 +494,7 @@
 
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; border-bottom: 1px dashed #ccc; padding-bottom: 3px;">
                         <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
-                            <span class="label">Attributo:</span> 
+                            <span class="label">{{status_tag}}</span> 
                             <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                         </div>
                         <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
@@ -509,7 +509,7 @@
 
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px;">
                         <div style="flex-grow: 1; margin-right: 8px; display: flex; align-items: flex-end;">
-                            <span class="label">Attributo:</span> 
+                            <span class="label">{{status_tag}}</span> 
                             <div class="input-overlay-wrapper"><div class="line" style="margin-bottom: 0;"></div><input type="text" style="padding-bottom: 0;"></div>
                         </div>
                         <div style="display: flex; gap: 2px; align-items: center; font-size: 8px; text-align: center;">
