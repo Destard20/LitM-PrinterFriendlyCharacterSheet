@@ -29,7 +29,8 @@ Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder 
 * `src/`: the templates, the language files (`src/lang/en.json`, `src/lang/it.json`) and the fonts (`src/fonts/`).
 * `build.py`: generates every HTML file and PDF in `en/` and `it/` from `src/`, and warns about any leftover file there that it no longer produces.
 * `pdf-manifest.json`: written by `build.py`; remembers which HTML each PDF was printed from.
-* `.github/workflows/build.yml`: runs `build.py` on GitHub automatically (see *Automatic builds* below).
+* `.github/workflows/build.yml`: runs `build.py` on GitHub automatically, then uploads to itch.io (see *Automatic builds* and *Publishing to itch.io* below).
+* `itch/`: the text for the itch.io page, ready to paste.
 
 ## 📖 How to Use
 
@@ -76,7 +77,18 @@ Templates use `{{key}}` placeholders, filled from the language file. If a templa
 ### Adding a language
 1. Copy `src/lang/en.json` to `src/lang/<code>.json` (e.g. `es.json`).
 2. Translate the values; keep the keys. Set `_code` (used in file names, e.g. `ES`), `_folder_sheet` and `_folder_cards` (the output folder names), and `lang` (the HTML language code, e.g. `es`).
-3. Run `python3 build.py`. The new language appears in its own folder (e.g. `es/`).
+3. Run `python3 build.py`. The new language appears in its own folder (e.g. `es/`), and in the itch.io uploads.
+
+### Publishing to itch.io
+The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads 7 downloads per language: each PDF on its own, plus a zip of all the HTML files (`en-html`, `it-html`). Files that didn't change are skipped.
+
+One-time setup:
+1. Create an API key at <https://itch.io/user/settings/api-keys>.
+2. Save it as a repository secret named `BUTLER_API_KEY` (GitHub repo → **Settings** → **Secrets and variables** → **Actions**, or `gh secret set BUTLER_API_KEY`).
+
+Without the secret, the Action just skips the upload. To upload by hand: **Actions** → **Build sheets** → **Run workflow** (on `main`; tick *Upload every file* to re-upload unchanged files too). Locally, `python3 tools/publish_itch.py --dry-run` shows what would be uploaded.
+
+itch.io has no API for the page text: edit it by pasting from `itch/page.html` (see `itch/README.md`).
 
 ## 📜 Credits & Acknowledgments
 

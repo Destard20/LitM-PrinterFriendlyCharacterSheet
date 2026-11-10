@@ -1,5 +1,5 @@
 # Rebuilds the HTML sheets and PDFs in en/ and it/ whenever their sources change,
-# and commits the result back to the branch.
+# commits the result back to the branch, and (on main) uploads them to itch.io.
 name: Build sheets
 
 on:
@@ -8,9 +8,15 @@ on:
     paths:
       - "src/**"
       - "build.py"
+      - "tools/publish_itch.py"
       - ".github/workflows/build.yml"
   # Adds a "Run workflow" button in the Actions tab (works on any branch).
   workflow_dispatch:
+    inputs:
+      force_itch:
+        description: "Upload every file to itch.io, even unchanged ones"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -41,3 +47,33 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "regenerate sheets from src/"
           git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      # ---- itch.io: only on main, and only once the BUTLER_API_KEY secret exists ----
+      - name: Check whether to publish to itch.io
+        id: itch
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          if [ "$GITHUB_REF_NAME" != "main" ]; then
+            echo "::notice::Not on main: skipping the itch.io upload."
+          elif [ -z "$BUTLER_API_KEY" ]; then
+            echo "::notice::No BUTLER_API_KEY secret: skipping the itch.io upload."
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install butler
+        if: steps.itch.outputs.publish == 'true'
+        run: |
+          curl -sSfL -o butler.zip https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+          mkdir -p "$RUNNER_TEMP/butler"
+          unzip -q butler.zip -d "$RUNNER_TEMP/butler"
+          rm butler.zip
+          chmod +x "$RUNNER_TEMP/butler/butler"
+          echo "$RUNNER_TEMP/butler" >> "$GITHUB_PATH"
+
+      - name: Upload to itch.io
+        if: steps.itch.outputs.publish == 'true'
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: python3 tools/publish_itch.py ${{ inputs.force_itch && '--force' || '' }}
