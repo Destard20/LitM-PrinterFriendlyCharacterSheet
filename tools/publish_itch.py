@@ -6,10 +6,11 @@
     python3 tools/publish_itch.py --force     # upload even channels that didn't change
 
 Each butler "channel" is one download on the itch page:
-  * the PDFs of PDF_LANGUAGES with scratchmarks (character sheet and action cards, A4 and
-    Letter), one channel each, so they download directly as PDFs;
+  * the PDFs of PDF_LANGUAGES with scratchmarks (character sheet, action cards and
+    Fellowship card, A4 and Letter), one channel each, so they download directly as PDFs;
   * for every language in ZIP_LANGUAGES, one channel with all its HTML files (printable,
-    no-scratchmarks and web-fillable), which itch serves as a zip.
+    no-scratchmarks and web-fillable) plus a contents.txt listing them, which itch serves
+    as a zip.
 Everything else stays available on GitHub.
 
 Run `python3 build.py --pdf` first. The GitHub Action does both automatically.
@@ -63,10 +64,16 @@ def channels(stage: Path) -> list:
     for lang in ZIP_LANGUAGES:
         html_dir = ROOT / lang / "HTML"
         html_stage = stage / f"{lang}-html"
-        for html in sorted(html_dir.rglob("*.html")):
-            dest = html_stage / html.relative_to(html_dir)
+        files = sorted(html.relative_to(html_dir) for html in html_dir.rglob("*.html"))
+        for rel in files:
+            dest = html_stage / rel
             dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(html, dest)
+            shutil.copyfile(html_dir / rel, dest)
+        # butler's --if-changed only notices changed or deleted files, not new ones, so a new
+        # sheet alone would never be uploaded. This list changes whenever a file is added.
+        (html_stage / "contents.txt").write_text(
+            "Open any of these files in a web browser, then print it.\n\n"
+            + "".join(f"{rel.as_posix()}\n" for rel in files), encoding="utf-8")
         result.append((f"{lang}-html", html_stage))
     return result
 
@@ -124,12 +131,12 @@ def publish(stage: Path, target: str, args) -> int:
             sys.exit("error: butler not found; install it from https://itch.io/docs/butler/ or set BUTLER")
 
     ver = version()
-    print(f"{'Would upload' if args.dry_run else 'Uploading'} {len(chans)} downloads to {target} (version {ver})")
+    print(f"{'Would upload' if args.dry_run else 'Uploading'} {len(chans)} downloads to {target} (version {ver})", flush=True)
     for channel, path in chans:
         cmd = [butler, "push", str(path), f"{target}:{channel}", "--userversion", ver]
         if not args.force:
             cmd.append("--if-changed")
-        print(f"  {channel:26} <- {show(path)}")
+        print(f"  {channel:26} <- {show(path)}", flush=True)
         if not args.dry_run:
             subprocess.run(cmd, check=True)
     return 0

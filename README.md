@@ -39,6 +39,8 @@ Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder 
 * `build.py`: generates every HTML file and PDF in `en/` and `it/` from `src/`, and warns about any leftover file there that it no longer produces.
 * `pdf-manifest.json`: written by `build.py`; remembers which HTML each PDF was printed from.
 * `.github/workflows/build.yml`: runs `build.py` on GitHub automatically, then uploads to itch.io (see *Automatic builds* and *Publishing to itch.io* below).
+* `tools/`: `publish_itch.py` (the itch.io upload) and `fetch_fonts.py` (downloads the fonts into `src/fonts/`).
+* `AGENT.md`: notes for AI coding assistants (and anyone changing the code): how the build works, conventions, and how to check a change. `CLAUDE.md` points to it.
 
 ## 📖 How to Use
 
@@ -90,9 +92,9 @@ Templates use `{{key}}` placeholders, filled from the language file. If a templa
 ### Publishing to itch.io
 The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads:
 * the English PDFs with scratchmarks: character sheet, action cards and full-page Fellowship card, A4 and Letter (one download each);
-* one zip per language (`en-html`, `it-html`) with all of that language's HTML files: standard, no-scratchmarks and web-fillable.
+* one zip per language (`en-html`, `it-html`) with all of that language's HTML files (standard, no-scratchmarks and web-fillable) and a `contents.txt` listing them.
 
-`PDF_LANGUAGES` and `ZIP_LANGUAGES` in `tools/publish_itch.py` control which languages go to itch. Files that didn't change are skipped.
+`PDF_LANGUAGES` and `ZIP_LANGUAGES` in `tools/publish_itch.py` control which languages go to itch. Files that didn't change are skipped. If a download on itch ever looks out of date, run the workflow by hand (**Actions** → **Build sheets** → **Run workflow**) with **force_itch** ticked, which uploads everything again.
 
 One-time setup:
 1. Create an API key at <https://itch.io/user/settings/api-keys>.
