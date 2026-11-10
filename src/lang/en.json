@@ -2,6 +2,7 @@
   "_code": "EN",
   "_folder_sheet": "CharacterSheet",
   "_folder_cards": "ActionCards",
+  "_folder_fellowship": "Fellowship",
   "lang": "en",
   "title_sheet": "Legend in the Mist - Character Sheet",
   "portrait": "Portrait",
@@ -37,5 +38,10 @@
   "notes": "Notes",
   "cut_hint": "Cut along the dashed lines",
   "title_cards_web": "Legend in the Mist - Web-Fillable Action Cards",
-  "ph_action_name": "Action Name"
+  "ph_action_name": "Action Name",
+  "fellowship_card": "Fellowship Card",
+  "title_fellowship": "Legend in the Mist - Fellowship Card",
+  "title_fellowship_web": "Legend in the Mist - Web-Fillable Fellowship Card",
+  "ph_fellowship_name": "Fellowship Name",
+  "two_per_page": "2 per Page"
 }

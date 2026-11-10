@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+<meta charset="UTF-8">
+<title>{{page_title}}</title>
+<style>
+    /* Fonts embedded by build.py (src/fonts/), so the sheet looks the same on every computer */
+{{font_faces}}
+    /* Paper: {{paper_name}} ({{paper_w}} x {{paper_h}} mm). Print at 100% scale, margins "None". */
+    @page { size: {{page_size}}; margin: 0; }
+    /* Always print backgrounds (white patches behind box titles) */
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    :root {
+        --border-thick: 3px solid #111;
+        --paper-w: {{paper_w}}mm;
+        --paper-h: {{paper_h}}mm;
+    }
+    body {
+        font-family: 'EB Garamond', 'LitM Symbols', 'LitM Scratch', serif;
+        background: #eee;
+        margin: 0;
+        padding: 20px;
+        color: #111;
+    }
+    .page {
+        position: relative;
+        overflow: hidden;
+        background: #fff;
+        width: var(--paper-w);
+        height: var(--paper-h);
+        margin: 0 auto 20px;
+        box-sizing: border-box;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        display: flex;
+        flex-direction: column;
+    }
+    @media print {
+        body { background: #fff; padding: 0; margin: 0; }
+        .page { box-shadow: none; margin: 0; page-break-after: always; break-after: page; }
+        .page:last-child { page-break-after: auto; break-after: auto; }
+    }
+
+    /* One copy of the Fellowship card + its side boxes */
+    .region { flex: 1 1 0; min-height: 0; display: flex; box-sizing: border-box; }
+    .spread { flex-grow: 1; display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--gap); }
+    .side { display: flex; flex-direction: column; gap: var(--gap); min-height: 0; }
+    .side .box { flex: 1 1 0; min-height: 0; }
+
+    /* Boxes (same look as the character sheet) */
+    .box {
+        border: var(--border-thick);
+        border-radius: 8px;
+        padding: var(--box-pad);
+        position: relative;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        background: #fdfdfd;
+    }
+    .box-title {
+        position: absolute;
+        top: calc(var(--title-size) * -0.85);
+        left: 15px;
+        background: #fff;
+        padding: 0 5px;
+        font-weight: bold;
+        font-size: var(--title-size);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .theme-icons {
+        position: absolute;
+        top: calc(var(--title-size) * -0.85);
+        right: 15px;
+        background: #fff;
+        padding: 0 5px;
+        font-size: calc(var(--title-size) * 1.15);
+        letter-spacing: 3px;
+        color: #333;
+    }
+
+    /* Tag lines */
+    .tag-row { display: flex; align-items: flex-end; height: var(--row); flex-shrink: 0; }
+    .tag-row.name-row { height: var(--name-row); }
+    .tag-icon { font-size: var(--icon-size); margin-right: 6px; margin-bottom: 1px; font-family: 'LitM Symbols', sans-serif; color: #111; }
+    .line { border-bottom: 1px solid #999; flex-grow: 1; align-self: stretch; }
+    .name-line { border-bottom: 2.5px solid #111; }
+    .scratch-mark {
+        width: var(--box-size); height: var(--box-size); border: 1px solid #555; border-radius: 3px;
+        margin-left: 6px; background: #fff; flex-shrink: 0; overflow: hidden; text-align: center;
+    }
+    .claw-scratch {
+        font-family: 'LitM Scratch', sans-serif;
+        display: inline-block;
+        transform: scaleX(-1) rotate(90deg);
+        font-size: calc(var(--box-size) - 1px);
+        font-weight: bold;
+        color: #444;
+        line-height: 1;
+    }
+
+    /* Quest: a ruled box that takes the space left in the card */
+    .section-label { font-size: var(--label-size); font-weight: bold; text-transform: uppercase; margin: var(--label-gap) 0 2px 0; letter-spacing: 1px; color: #000; }
+    .quest-box {
+        flex: 1 1 0; min-height: var(--quest-min); border: 1px solid #888; border-radius: 5px; background: #fff;
+        display: flex; flex-direction: column; padding: 0 6px 4px;
+    }
+    /* Ruled writing area: lines at the tag-line spacing, as many as fit (the rest are clipped) */
+    .ruled { flex: 1 1 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .ruled .line { flex: 0 0 var(--row); }
+
+    /* Abandon / Improve / Milestone */
+    .tracks-container { margin-top: var(--label-gap); border-top: 1px solid #ccc; padding-top: 4px; }
+    .track { display: flex; justify-content: space-between; align-items: center; font-size: var(--label-size); font-weight: bold; margin-bottom: 3px; }
+    .checkbox-group { display: flex; gap: 6px; align-items: center; }
+    .circle { width: var(--circle-size); height: var(--circle-size); border: 2px solid #333; border-radius: 50%; display: inline-block; }
+
+    /* Side boxes: lines from top to bottom */
+    .side .box { padding-top: calc(var(--box-pad-top) - 2mm); }
+
+    /* Half page, 2 per sheet: cut line across the middle */
+    .cut { position: absolute; z-index: 2; pointer-events: none; }
+    .cut.h { left: 0; right: 0; height: 0; border-top: 0.2mm dashed #888; margin-top: -0.1mm; }
+    .cut-hint {
+        position: absolute; z-index: 3; left: 12mm; transform: translateY(-50%);
+        font-size: 8px; color: #777; background: #fff; padding: 0 1.5mm; letter-spacing: 0.5px; white-space: nowrap;
+    }
+    .cut-hint .scissors { font-family: 'LitM Symbols', sans-serif; font-size: 11px; margin-right: 1mm; }
+
+    /* Sizes: a whole page per card ... */
+    body.full {
+        --gap: 6mm; --box-pad: 7mm 6mm 5mm; --box-pad-top: 7mm;
+        --title-size: 14px; --label-size: 12.5px; --label-gap: 4mm;
+        --row: 11mm; --name-row: 16mm; --icon-size: 16px; --box-size: 14px; --circle-size: 13px;
+        --quest-min: 30mm;
+        font-size: 14px;
+    }
+    body.full .region { padding: 12mm 12mm 10mm; }
+    /* ... or half a page, two per sheet */
+    body.half {
+        --gap: 4mm; --box-pad: 5mm 4mm 3mm; --box-pad-top: 5mm;
+        --title-size: 11px; --label-size: 10px; --label-gap: 2mm;
+        --row: 6.3mm; --name-row: 9mm; --icon-size: 12px; --box-size: 11px; --circle-size: 10px;
+        --quest-min: 10mm;
+        font-size: 11.5px;
+    }
+    body.half .region { padding: 8mm 12mm 6mm; }
+{{web_css}}</style>
+</head>
+<body class="{{layout}}">
+
+{{pages}}
+
+</body>
+</html>

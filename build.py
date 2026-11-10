@@ -188,11 +188,54 @@ def build_action_cards(html_dir: Path, pdf_dir: Path, code: str, text: dict, use
     return to_print
 
 
+# Fellowship card: the quest box and the two side boxes are ruled with more lines than fit;
+# each box clips the extra ones, so the lines always fill the box whatever its height.
+RULED_LINES = '<div class="line"></div>' * 30
+
+
+def build_fellowship(html_dir: Path, pdf_dir: Path, code: str, text: dict, used: set) -> list:
+    """Write the Fellowship card sheets; return the (html, pdf, paper) to print.
+
+    Full page: one card per sheet. Half page: the same card at half size, twice per sheet."""
+    to_print = []
+    used.update({"title_fellowship", "title_fellowship_web", "two_per_page"})  # PDF names, page titles
+    title = text["title_fellowship"]
+    web_css = (SRC / "fellowship_web.css").read_text(encoding="utf-8")
+    for paper, p in PAPERS.items():
+        page = {"page_title": title, "page_size": p["page_size"], "paper_name": paper,
+                "paper_w": mm(p["w"]), "paper_h": mm(p["h"])}
+        for layout, file_suffix, pdf_part in (("full", "", ""), ("half", "_2PerPage", f", {text['two_per_page']}")):
+            for scratch_suffix, scratch, pdf_scratch in (("", SCRATCH, ""), ("_NoScratchmarks", "", f", {NO_SCRATCH_PDF}")):
+                spread = render("fellowship_spread.html",
+                                {**text, "scratch": scratch, "ruled_lines": RULED_LINES}, used).rstrip("\n")
+                region = f'        <div class="region">\n{spread}\n        </div>\n'
+                if layout == "full":
+                    body = region
+                else:  # two copies, with a cut line across the middle of the sheet
+                    half = mm(p["h"] / 2)
+                    body = (region
+                            + f'        <div class="cut h" style="top: {half}mm;"></div>\n'
+                            + f'        <div class="cut-hint" style="top: {half}mm;"><span class="scissors">✂</span>{text["cut_hint"]}</div>\n'
+                            + region)
+                pages = f'    <div class="page">\n{body}    </div>'
+                html = render("fellowship.html", {**text, **page, "layout": layout, "pages": pages, "web_css": ""}, used)
+                html_path = html_dir / f"LitM_Fellowship_{code}_{paper}{file_suffix}{scratch_suffix}.html"
+                write(html_path, html, "fellowship.html")
+                to_print.append((html_path, pdf_dir / f"{title} ({paper}{pdf_part}{pdf_scratch}).pdf", paper))
+        # Web-fillable: full page only (no PDF; it is printed after filling it in)
+        spread = render("fellowship_web_spread.html", {**text, "ruled_lines": RULED_LINES}, used).rstrip("\n")
+        pages = f'    <div class="page">\n        <div class="region">\n{spread}\n        </div>\n    </div>'
+        html = render("fellowship.html", {**text, **page, "page_title": text["title_fellowship_web"],
+                                          "layout": "full", "pages": pages, "web_css": web_css}, used)
+        write(html_dir / f"LitM_WebFillable_Fellowship_{code}_{paper}.html", html, "fellowship.html")
+    return to_print
+
+
 def build_language(lang_file: Path) -> list:
     data = json.loads(lang_file.read_text(encoding="utf-8"))
     meta = {k: v for k, v in data.items() if k.startswith("_")}
     text = {k: v for k, v in data.items() if not k.startswith("_")}
-    for key in ("_code", "_folder_sheet", "_folder_cards"):
+    for key in ("_code", "_folder_sheet", "_folder_cards", "_folder_fellowship"):
         if key not in meta:
             raise BuildError(f"{lang_file.name}: missing {key}")
 
@@ -203,6 +246,8 @@ def build_language(lang_file: Path) -> list:
     sheet, cards = meta["_folder_sheet"], meta["_folder_cards"]
     to_print = build_hero_sheets(out / "HTML" / sheet, out / "PDF" / sheet, code, text, used)
     to_print += build_action_cards(out / "HTML" / cards, out / "PDF" / cards, code, text, used)
+    fellowship = meta["_folder_fellowship"]
+    to_print += build_fellowship(out / "HTML" / fellowship, out / "PDF" / fellowship, code, text, used)
 
     unused = sorted(set(text) - used)
     if unused:

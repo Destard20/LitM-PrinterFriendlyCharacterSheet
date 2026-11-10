@@ -2,6 +2,7 @@
   "_code": "IT",
   "_folder_sheet": "SchedaPersonaggio",
   "_folder_cards": "CarteAzione",
+  "_folder_fellowship": "Compagnia",
   "lang": "it",
   "title_sheet": "Legend in the Mist - Scheda del Personaggio",
   "portrait": "Ritratto",
@@ -37,5 +38,10 @@
   "notes": "Note",
   "cut_hint": "Ritaglia lungo le linee tratteggiate",
   "title_cards_web": "Legend in the Mist - Carte Azione Web-Fillable",
-  "ph_action_name": "Nome Azione"
+  "ph_action_name": "Nome Azione",
+  "fellowship_card": "Carta Compagnia",
+  "title_fellowship": "Legend in the Mist - Carta Compagnia",
+  "title_fellowship_web": "Legend in the Mist - Carta Compagnia Web-Fillable",
+  "ph_fellowship_name": "Nome della Compagnia",
+  "two_per_page": "2 per Pagina"
 }
