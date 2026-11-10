@@ -25,14 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The sheets use 'Book Antiqua' / Palatino. On Linux, this package provides
-      # P052, a Palatino clone that fontconfig substitutes automatically.
-      - name: Install fonts
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-urw-base35
-
-      # Google Chrome comes preinstalled on GitHub's Ubuntu runners.
+      # Google Chrome comes preinstalled on GitHub's Ubuntu runners. No fonts need
+      # installing: build.py embeds the fonts from src/fonts/ into every sheet.
       - name: Build HTML and PDFs
         run: python3 build.py --pdf
 

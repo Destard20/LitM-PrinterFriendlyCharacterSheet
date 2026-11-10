@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>{{title_web}}</title>
 <style>
+    /* Fonts embedded by build.py (src/fonts/), so the sheet looks the same on every computer */
+{{font_faces}}
     @page { size: A4; margin: 0; }
     /* Always print backgrounds (white patches behind box titles, shaded headers) */
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -12,7 +14,7 @@
         --border-thin: 1px solid #555; 
     }
     body { 
-        font-family: 'Book Antiqua', Palatino, serif; 
+        font-family: 'EB Garamond', 'LitM Symbols', 'LitM Scratch', serif; 
         font-size: 11.5px; 
         background: #eee; 
         margin: 0; 
@@ -79,7 +81,7 @@
         color: #333; 
     }
     .tag-row { display: flex; align-items: center; margin-bottom: 6px; }
-    .tag-icon { font-size: 13px; margin-right: 6px; font-family: sans-serif; color: #111; }
+    .tag-icon { font-size: 13px; margin-right: 6px; font-family: 'LitM Symbols', sans-serif; color: #111; }
     
     .quest-box { border: 1px solid #888; border-radius: 5px; height: 45px; background: #fff; padding: 2px;}
     .tracks-container { margin-top: auto; border-top: 1px solid #ccc; padding-top: 5px; }
@@ -164,7 +166,7 @@
         content: '彡';
         position: absolute;
         transform: scaleX(-1) rotate(90deg);
-        font-size: 10px; font-weight: bold; color: #444; line-height: 1;
+        font-family: 'LitM Scratch', sans-serif; font-size: 10px; font-weight: bold; color: #444; line-height: 1;
         top: 0px; left: 0px;
     }
 

@@ -22,7 +22,7 @@ Available in **English** (`en/`) and **Italian** (`it/`).
 * Every version is also available as a ready-to-print PDF.
 
 **Source** (only needed to change the sheets, see *Editing the sheets* below):
-* `src/`: the templates and the language files (`src/lang/en.json`, `src/lang/it.json`).
+* `src/`: the templates, the language files (`src/lang/en.json`, `src/lang/it.json`) and the fonts (`src/fonts/`).
 * `build.py`: generates every HTML file and PDF in `en/` and `it/` from `src/`.
 * `pdf-manifest.json`: written by `build.py`; remembers which HTML each PDF was printed from.
 * `.github/workflows/build.yml`: runs `build.py` on GitHub automatically (see *Automatic builds* below).
@@ -65,6 +65,8 @@ PDFs are printed with a headless browser. It uses Chrome, Edge, Chromium or Brav
 
 Commit the `src/` change together with the regenerated files (or just push `src/` and let the GitHub Action do the rest).
 
+The fonts (see *Credits*) are embedded into every sheet by `build.py`, so the sheets and PDFs look the same on every computer, with nothing to install. To change fonts or add character sets, edit and run `tools/fetch_fonts.py`, which downloads them from Google Fonts into `src/fonts/`.
+
 Templates use `{{key}}` placeholders, filled from the language file. If a template uses a key that a language file doesn't have, the build stops and names it.
 
 ### Adding a language
@@ -78,6 +80,7 @@ This project stands on the shoulders of existing fantastic designs for the game:
 
 * **Original Structure:** The layout, fields, and core structure are directly based on the official [Legend in the Mist RPG - Character Sheet](https://cdn.shopify.com/s/files/1/2508/6356/files/Legend_in_the_Mist_RPG_-_Character_Sheet.pdf) provided by Son of Oak Game Studio.
 * **Layout Inspiration:** The portrait-style organization and flow were inspired by the community-made [Legend in the Mist - Portrait Character Sheet](https://www.drivethrurpg.com/en/product/534731/legend-in-the-mist-portrait-character-sheet) available on DriveThruRPG.
+* **Fonts:** [EB Garamond](https://fonts.google.com/specimen/EB+Garamond) for all text, [Noto Sans Symbols 2](https://fonts.google.com/noto/specimen/Noto+Sans+Symbols+2) and [Noto Sans Symbols](https://fonts.google.com/noto/specimen/Noto+Sans+Symbols) for the icons, and [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP) for the 彡 scratchmark. All are under the [SIL Open Font License](https://openfontlicense.org); the licence texts are in `src/fonts/`.
 * **AI Assistance:** The HTML/CSS coding and formatting adjustments were generated with the assistance of Google's Gemini AI.
 
 ---

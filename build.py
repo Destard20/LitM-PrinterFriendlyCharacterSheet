@@ -23,6 +23,7 @@ Only the Python standard library is used.
 """
 import argparse
 import base64
+import functools
 import hashlib
 import json
 import os
@@ -41,6 +42,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 LANG_DIR = SRC / "lang"
+FONTS_DIR = SRC / "fonts"
 MANIFEST = ROOT / "pdf-manifest.json"
 PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
 
@@ -71,9 +73,26 @@ def mm(x: float) -> str:
     return f"{x:.2f}".rstrip("0").rstrip(".")
 
 
+@functools.lru_cache(maxsize=None)
+def font_faces() -> str:
+    """@font-face rules with the fonts from src/fonts/ embedded, so every OS shows the same fonts."""
+    faces = json.loads((FONTS_DIR / "fonts.json").read_text(encoding="utf-8"))
+    rules = []
+    for face in faces:
+        data = base64.b64encode((FONTS_DIR / face["file"]).read_bytes()).decode("ascii")
+        rules.append(
+            f"    @font-face {{ font-family: '{face['family']}'; font-style: {face['style']}; "
+            f"font-weight: {face['weight']}; font-display: block; "
+            f"unicode-range: {face['unicode_range']}; "
+            f"src: url(data:font/woff2;base64,{data}) format('woff2'); }}"
+        )
+    return "\n".join(rules)
+
+
 def render(template: str, values: dict, used: set) -> str:
     """Fill {{key}} placeholders in src/<template>. Unknown keys are an error."""
     text = (SRC / template).read_text(encoding="utf-8")
+    values = {"font_faces": font_faces(), **values}
 
     def fill(m):
         key = m.group(1)
@@ -247,6 +266,8 @@ class ChromiumPrinter:
                 "--no-first-run",
                 "--no-default-browser-check",
                 "--no-pdf-header-footer",
+                "--run-all-compositor-stages-before-draw",
+                "--virtual-time-budget=10000",  # let the embedded fonts load before printing
                 f"--user-data-dir={Path(tmp, 'profile')}",  # never hand off to an open browser window
                 f"--print-to-pdf={out}",
                 html_path.as_uri(),
@@ -304,7 +325,12 @@ class FirefoxPrinter:
     def print(self, html_path: Path, pdf_path: Path, paper: str) -> None:
         p = PAPERS[paper]
         self.call("POST", f"/session/{self.session}/url", {"url": html_path.as_uri()})
-        pdf = self.call("POST", f"/session/{self.session}/print", {
+        # Wait until the embedded fonts are loaded, so they end up in the PDF.
+        self.call("POST", f"/session/{self.session}/execute/async", {
+            "script": "const done = arguments[arguments.length - 1]; document.fonts.ready.then(() => done(true));",
+            "args": [],
+        })
+        pdf =self.call("POST", f"/session/{self.session}/print", {
             "background": True,
             "shrinkToFit": False,
             "page": {"width": p["w"] / 10, "height": p["h"] / 10},  # cm
