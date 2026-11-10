@@ -90,7 +90,7 @@ Templates use `{{key}}` placeholders, filled from the language file. If a templa
 ### Publishing to itch.io
 The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads:
 * the English PDFs with scratchmarks: character sheet, action cards and full-page Fellowship card, A4 and Letter (one download each);
-* one zip per language (`en-html`, `it-html`) with all of that language's HTML files: standard, no-scratchmarks and web-fillable.
+* one zip per language (`en-html`, `it-html`) with all of that language's HTML files (standard, no-scratchmarks and web-fillable) and a `contents.txt` listing them.
 
 `PDF_LANGUAGES` and `ZIP_LANGUAGES` in `tools/publish_itch.py` control which languages go to itch. Files that didn't change are skipped.
 
