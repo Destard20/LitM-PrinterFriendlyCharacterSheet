@@ -5,11 +5,12 @@
     python3 tools/publish_itch.py             # upload (needs butler + BUTLER_API_KEY)
     python3 tools/publish_itch.py --force     # upload even channels that didn't change
 
-Each butler "channel" is one download on the itch page. Only the languages in
-ITCH_LANGUAGES are uploaded, and only the versions with scratchmarks:
-  * every PDF gets its own channel, so it downloads directly as a PDF;
-  * the HTML files (printable + web-fillable) are one channel, which itch serves as a zip.
-The other versions stay available on GitHub.
+Each butler "channel" is one download on the itch page:
+  * the PDFs of PDF_LANGUAGES with scratchmarks (character sheet and action cards, A4 and
+    Letter), one channel each, so they download directly as PDFs;
+  * for every language in ZIP_LANGUAGES, one channel with all its HTML files (printable,
+    no-scratchmarks and web-fillable), which itch serves as a zip.
+Everything else stays available on GitHub.
 
 Run `python3 build.py --pdf` first. The GitHub Action does both automatically.
 Environment:
@@ -35,30 +36,32 @@ DEFAULT_TARGET = "destard20/litm-printerfriendlysheets"
 # itch tags a download as a game for an operating system if its channel name contains these.
 PLATFORM_WORDS = ("win", "linux", "mac", "osx", "android")
 
-ITCH_LANGUAGES = ("en",)     # language files (src/lang/<code>.json) to upload
-SKIP_HTML = "NoScratchmarks"  # HTML files with this in their name stay off itch
+PDF_LANGUAGES = ("en",)       # languages (src/lang/<code>.json) whose PDFs get their own download
+ZIP_LANGUAGES = ("en", "it")  # languages that get a zip with all their HTML files
 
 
 def channels(stage: Path) -> list:
     """(channel, path) for every download, following the names build.py gives the files.
 
-    The HTML zip is assembled in `stage`, a temporary folder, so it holds only the files we want."""
+    The HTML zips are assembled in `stage`, a temporary folder, so they hold only HTML files."""
     result = []
-    for lang in ITCH_LANGUAGES:
+    for lang in PDF_LANGUAGES:
         data = json.loads((build.LANG_DIR / f"{lang}.json").read_text(encoding="utf-8"))
-        out = ROOT / lang
-        sheet_pdf = out / "PDF" / data["_folder_sheet"]
-        cards_pdf = out / "PDF" / data["_folder_cards"]
-
-        result.append((f"{lang}-character-sheet", sheet_pdf / f"{data['title_sheet']}.pdf"))
+        pdf = ROOT / lang / "PDF"
         for paper in build.PAPERS:
-            result.append((f"{lang}-action-cards-{paper.lower()}", cards_pdf / f"{data['title_cards']} ({paper}).pdf"))
+            # The A4 sheet keeps the channel name it had before Letter existed, so itch updates
+            # that download instead of adding a new one.
+            sheet = f"{lang}-character-sheet" + ("" if paper == "A4" else f"-{paper.lower()}")
+            result.append((sheet, pdf / data["_folder_sheet"] / f"{data['title_sheet']} ({paper}).pdf"))
+        for paper in build.PAPERS:
+            result.append((f"{lang}-action-cards-{paper.lower()}",
+                           pdf / data["_folder_cards"] / f"{data['title_cards']} ({paper}).pdf"))
 
+    for lang in ZIP_LANGUAGES:
+        html_dir = ROOT / lang / "HTML"
         html_stage = stage / f"{lang}-html"
-        for html in sorted((out / "HTML").rglob("*.html")):
-            if SKIP_HTML in html.name:
-                continue
-            dest = html_stage / html.relative_to(out / "HTML")
+        for html in sorted(html_dir.rglob("*.html")):
+            dest = html_stage / html.relative_to(html_dir)
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(html, dest)
         result.append((f"{lang}-html", html_stage))
@@ -123,7 +126,7 @@ def publish(stage: Path, target: str, args) -> int:
         cmd = [butler, "push", str(path), f"{target}:{channel}", "--userversion", ver]
         if not args.force:
             cmd.append("--if-changed")
-        print(f"  {channel:22} <- {show(path)}")
+        print(f"  {channel:26} <- {show(path)}")
         if not args.dry_run:
             subprocess.run(cmd, check=True)
     return 0

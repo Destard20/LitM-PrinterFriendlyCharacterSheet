@@ -16,14 +16,15 @@ Each language folder has a `PDF/` folder (ready to print) and an `HTML/` folder 
 | Action cards, HTML | [`en/HTML/ActionCards/`](en/HTML/ActionCards) | [`it/HTML/CarteAzione/`](it/HTML/CarteAzione) |
 
 **Character sheet**:
-* **Standard** (`LitM_HeroSheet_EN.html`, PDF): features the stylized scratchmarks (`彡`) inside checkboxes.
-* **No Scratchmarks** (`…_NoScratchmarks.html`, PDF `… (No Scratchmarks).pdf`): a minimalist variant with clean, empty checkboxes.
-* **Web-Fillable** (`LitM_WebFillable_HeroSheet_EN.html`): fill it in the browser, with text fields and clickable checkboxes.
+* One file per paper size: **A4** or **Letter** (on Letter the writing lines are slightly closer together, so both pages fit).
+* **Standard** (`LitM_HeroSheet_EN_A4.html`, PDF): features the stylized scratchmarks (`彡`) inside checkboxes.
+* **No Scratchmarks** (`…_NoScratchmarks.html`, PDF `… (A4, No Scratchmarks).pdf`): a minimalist variant with clean, empty checkboxes.
+* **Web-Fillable** (`LitM_WebFillable_HeroSheet_EN_A4.html`): fill it in the browser, with text fields and clickable checkboxes.
 
 **Action cards**: a page of 9 reminder cards at standard trading-card size (63 × 88 mm, like Magic or Pokémon cards), with dashed cut lines. On each card, write an action (e.g. *Attack*), the power tags you usually use for it (e.g. *Sword*, *Mighty*), its weakness tags, and some notes.
 * One file per paper size: **A4** or **Letter**.
 * **Standard** (`LitM_ActionCards_EN_A4.html`, PDF) with scratchmarks, or **No Scratchmarks** (`…_NoScratchmarks.html`, PDF) with empty checkboxes.
-* **Web-Fillable** (`LitM_WebFillable_ActionCards_EN_A4.html`): type the action, tags and notes in the browser, tick the checkboxes, then print (see *Printing Action Cards*). Text isn't saved, so print before closing the page.
+* **Web-Fillable** (`LitM_WebFillable_ActionCards_EN_A4.html`): type the action, tags and notes in the browser, tick the checkboxes, then print (see *Printing*). Text isn't saved, so print before closing the page.
 
 **Source** (only needed to change the sheets, see *Editing the sheets* below):
 * `src/`: the templates, the language files (`src/lang/en.json`, `src/lang/it.json`) and the fonts (`src/fonts/`).
@@ -43,8 +44,8 @@ Download and print the `.pdf` file corresponding to your preferred language and 
 3. Open the browser's print dialog (`Ctrl + P` or `Cmd + P`).
 4. The sheets ask the browser to print their backgrounds. If box titles still have a line through them, enable **"Print Background Graphics"** (or "Background colors and images") in the print settings.
 
-### Printing Action Cards
-To get cards at the exact size, use these print settings:
+### Printing
+Print PDFs at 100% scale ("Actual size", not "Fit to page"). For action cards printed from HTML, use these settings to get cards at the exact size:
 * **Paper size:** the one in the file name (A4 or Letter).
 * **Margins:** None.
 * **Scale:** 100% / "Actual size" (not "Fit to page").
@@ -80,7 +81,11 @@ Templates use `{{key}}` placeholders, filled from the language file. If a templa
 3. Run `python3 build.py`. The new language appears in its own folder (e.g. `es/`).
 
 ### Publishing to itch.io
-The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads only the English versions with scratchmarks: the character sheet PDF, the action card PDFs (A4 and Letter), and a zip of the matching HTML files, printable and web-fillable (`en-html`). Italian and no-scratchmark versions stay on GitHub only; `ITCH_LANGUAGES` in `tools/publish_itch.py` controls which languages go to itch. Files that didn't change are skipped.
+The [itch.io page](https://destard20.itch.io/litm-printerfriendlysheets) is updated by the same GitHub Action, after each build on `main`, using itch's upload tool [butler](https://itch.io/docs/butler/). It uploads:
+* the English PDFs with scratchmarks: character sheet and action cards, A4 and Letter (one download each);
+* one zip per language (`en-html`, `it-html`) with all of that language's HTML files: standard, no-scratchmarks and web-fillable.
+
+`PDF_LANGUAGES` and `ZIP_LANGUAGES` in `tools/publish_itch.py` control which languages go to itch. Files that didn't change are skipped.
 
 One-time setup:
 1. Create an API key at <https://itch.io/user/settings/api-keys>.

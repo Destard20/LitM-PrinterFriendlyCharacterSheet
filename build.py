@@ -56,6 +56,9 @@ PAPERS = {
     "A4": {"page_size": "A4", "w": 210.0, "h": 297.0},
     "Letter": {"page_size": "letter", "w": 215.9, "h": 279.4},
 }
+# Character sheet: minimum height of a writing line, in px. Letter paper is 17.6 mm shorter
+# than A4, so its lines are a little closer together for everything to fit.
+LINE_H = {"A4": 19, "Letter": 16}
 
 PDF_TIMEOUT = 120  # seconds per PDF
 
@@ -124,13 +127,16 @@ def rel(path: Path) -> str:
 def build_hero_sheets(html_dir: Path, pdf_dir: Path, code: str, text: dict, used: set) -> list:
     """Write the character sheets; return the (html, pdf, paper) to print."""
     to_print = []
-    for suffix, scratch, pdf_suffix in (("", SCRATCH, ""), ("_NoScratchmarks", "", f" ({NO_SCRATCH_PDF})")):
-        html = render("hero_sheet.html", {**text, "scratch": scratch}, used)
-        html_path = html_dir / f"LitM_HeroSheet_{code}{suffix}.html"
-        write(html_path, html, "hero_sheet.html")
-        to_print.append((html_path, pdf_dir / f"{text['title_sheet']}{pdf_suffix}.pdf", "A4"))
-    html = render("hero_sheet_web.html", text, used)
-    write(html_dir / f"LitM_WebFillable_HeroSheet_{code}.html", html, "hero_sheet_web.html")
+    for paper, p in PAPERS.items():
+        page = {"page_size": p["page_size"], "paper_w": mm(p["w"]), "paper_h": mm(p["h"]),
+                "line_h": str(LINE_H[paper]), "line_pitch": str(LINE_H[paper] + 6)}  # + margin and border
+        for suffix, scratch, pdf_suffix in (("", SCRATCH, ""), ("_NoScratchmarks", "", f", {NO_SCRATCH_PDF}")):
+            html = render("hero_sheet.html", {**text, **page, "scratch": scratch}, used)
+            html_path = html_dir / f"LitM_HeroSheet_{code}_{paper}{suffix}.html"
+            write(html_path, html, "hero_sheet.html")
+            to_print.append((html_path, pdf_dir / f"{text['title_sheet']} ({paper}{pdf_suffix}).pdf", paper))
+        html = render("hero_sheet_web.html", {**text, **page}, used)
+        write(html_dir / f"LitM_WebFillable_HeroSheet_{code}_{paper}.html", html, "hero_sheet_web.html")
     return to_print
 
 
@@ -404,6 +410,11 @@ def save_manifest(manifest: dict) -> None:
 
 def build_pdfs(to_print: list, force: bool) -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.is_file() else {}
+    # Forget PDFs this build no longer produces (e.g. after a rename).
+    current = {rel(pdf) for _, pdf, _ in to_print}
+    if set(manifest) - current:
+        manifest = {k: v for k, v in manifest.items() if k in current}
+        save_manifest(manifest)
     todo = []
     for html_path, pdf_path, paper in to_print:
         digest = sha256(html_path)
